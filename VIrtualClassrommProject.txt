@@ -1,0 +1,5492 @@
+ADD NEW COURSE
+
+<%@page import="java.sql.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Admin | Add New Course</title>
+        <link rel="stylesheet" href="edit.css" type="text/css" >
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>
+            <nav>
+    <a href="AdminHome.jsp"><i class="fa fa-home" aria-hidden="true"></i>HOME</a>
+<a href="Courses.jsp"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>BACK</a>
+</nav>
+	<center>
+            <form  method="Post">
+		<center>
+                    <h1>ADD NEW COURSE</h1>
+                    <p>Enter the required details</p>
+                    <hr>
+			<label for="email"><b>Subject name</b></label>
+			<input type="text" name="subject name" placeholder="Enter subject name" required/> <br/>
+                        <label for="email"><b>Semester</b></label>
+			<input type="text" name="Semester" placeholder="Enter Semester" required/> <br/>
+                        <label for="email"><b>Branch</b></label>
+			<input type="text" name="Branch" placeholder="Enter Branch" required/> <br/>
+                        <label for="email"><b>Faculty name</b></label>
+			<input type="text" name="Faculty name" placeholder="Enter Faculty name" required/> <br/>
+                    </hr>
+                    <button type="submit" class="registerbtn" name="btnInsert" value="Insert">Add</button>
+                </center>
+                        
+                <%
+                String pass1=(String)session.getAttribute("password1");
+                try{
+                    if(request.getParameter("btnInsert")!=null)
+                    {
+                        String n=request.getParameter("subject name"); 
+                        int se=Integer.parseInt(request.getParameter("Semester"));
+                        String b=request.getParameter("Branch");
+                        String f=request.getParameter("Faculty name");
+                        Class.forName("org.apache.derby.jdbc.ClientDriver");
+                        Connection c= DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+                        Statement s= c.createStatement();
+                        int x=s.executeUpdate("insert into sub_ject(sub_name,sem,branch,fname) values ('"+n+"',"+se+",'"+b+"','"+f+"')");
+                        if(x>0)
+                        {
+                        out.println("<script type=\"text/javascript\">");
+                        out.println("alert('New subject added successfully');");
+                        out.println("location='Courses.jsp';");
+                        out.println("</script>");    
+                        }
+                        s.close();
+                        if(n.isEmpty() ||b.isEmpty() || f.isEmpty()|| se==0)
+                        {
+                            RequestDispatcher req = request.getRequestDispatcher("AddNewCourse.jsp");
+                            req.include(request, response);
+                        }
+                    }
+                } 
+                catch (SQLException exx)
+                {
+                    exx.printStackTrace();
+                    out.println("something wrong");
+                }           
+%>
+        </form>
+	</center>
+   </body>
+</html>
+
+
+add new announement
+
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.sql.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Admin | Add New Announcement</title>
+<link rel="stylesheet" href="edit.css" type="text/css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <nav>
+    <a href="AdminHome.jsp"><i class="fa fa-home" aria-hidden="true"></i>HOME</a>
+<a href="Announcements.jsp"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>BACK</a>
+</nav>
+<center>
+<form method="Post">
+<center>
+<h1>ADD NEW ANNOUNCEMENTS</h1>
+<p>Enter the required details</p>
+<hr>
+<label for="email"><b>Notice</b></label>
+<input type="text" name="notice" placeholder="Enter new notice" required/>
+<br/>
+</hr>
+<button type="submit" class="registerbtn" name="btnInsert" value="Insert">Add</button>
+</center>
+<%
+String pass1=(String)session.getAttribute("password1");
+if(request.getParameter("btnInsert")!=null)
+{
+String n=request.getParameter("notice");
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+try{
+java.util.Date now = new java.util.Date();
+String DATE_FORMAT = "yyyy-MM-dd";
+SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+String strDateNew = sdf.format(now) ;
+Statement s= c.createStatement();
+int x=s.executeUpdate("insert into announcements( notice,date) values('"+n+"','"+strDateNew+"')");
+if(x>0)
+out.println("data inserted sucessfully");
+s.close();
+if(n.isEmpty() )
+{
+response.sendRedirect("AddNewsAnnouncements.jsp");
+}
+else
+{
+response.sendRedirect("Announcements.jsp");
+}
+}
+catch (SQLException exx)
+{
+exx.printStackTrace();
+out.println("something wrong");
+}
+}
+%>
+</form>
+</center>
+</body>
+</html>
+
+
+adminhome
+<%@page import="java.sql.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin | Home</title>
+<link rel="stylesheet" href="admin.css" type="text/css" >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body >
+<nav>
+<a href="Student.jsp"><i class="fa fa-users" aria-hidden="true"></i>STUDENTS</a>
+<a href="Faculty.jsp"><i class="fa fa-users" aria-hidden="true"></i>FACULTIES</a>
+<a href="Courses.jsp"><i class="fa fa-book" aria-hidden="true"></i>COURSES</a>
+<a href="Doubts.jsp"><i class="fa fa-question-circle" aria-hidden="true"></i>DOUBTS</a>
+<a href="Announcements.jsp"><i class="fa fa-bell" aria-hidden="true"></i>ANNOUNCEMENTS</a>
+<div style="text-align:right;
+float:right;"><a href="Main.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a></div>
+</nav>
+<main>
+<center><h1>Welcome to VIRTUAL CLASSROOM Admin</h1></center>
+<% String pass1=(String)session.getAttribute("password1");%>
+</main>
+</body>
+</html>
+
+adminlogout
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<!DOCTYPE html>
+<%
+session.invalidate();
+response.sendRedirect("Main.jsp");
+%>
+
+announcements
+<%@page import="java.sql.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Admin | Announcements</title>
+<link rel="stylesheet" href="reg_stud.css" type="text/css" >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<nav>
+<a href="AdminHome.jsp"><i class="fa fa-home" aria-hidden="true"></i>HOME</a>
+<a href="Student.jsp"><i class="fa fa-users" aria-hidden="true"></i>STUDENTS</a>
+<a href="Faculty.jsp"><i class="fa fa-users" aria-hidden="true"></i>FACULTIES</a>
+<a href="Courses.jsp"><i class="fa fa-book" aria-hidden="true"></i>COURSES</a>
+<a  href="Doubts.jsp"><i class="fa fa-question-circle" aria-hidden="true"></i>DOUBTS</a>
+<a class="selected" href="Announcements.jsp"><i class="fa fa-bell" aria-hidden="true"></i>ANNOUNCEMENTS</a>
+<a href="AddNewsAnnouncements.jsp"><i class="fa fa-plus-circle" aria-hidden="true"></i>ADD NEW ANNOUNCEMENT</a>
+<div class="right"><a href="Main.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a></div>
+</nav>
+<h2>All Announcements </h2>
+<table border="1">
+<tr>
+<th>Notice ID</th>
+<th>Notice</th>
+<th>Date of announcement</th>
+<th>Delete</th>
+</tr>
+<%
+String pass1=(String)session.getAttribute("password1");
+try{
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement s= c.createStatement();
+String sql="select * from announcements";
+ResultSet rs= s.executeQuery(sql);
+while(rs.next())
+{
+%>
+<tr>
+<td><%=rs.getString("nid") %></td>
+<td><%=rs.getString("notice") %></td>
+<td><%=rs.getString("date") %></td>
+<td><a href="DeleteAnnouncements.jsp?nid=<%=rs.getInt("nid") %>"><button type="button" class="delete">Delete</button></a></td>
+</tr>
+<%
+}
+rs.close();
+s.close();
+c.close();
+}
+catch(Exception e) {
+e.printStackTrace();
+}
+%>
+</table>
+</body>
+</html>
+
+cstudymaterial
+<%@page import="java.io.File"%>
+<%@page import="java.io.OutputStream"%>
+<%@page import="java.io.IOException"%>
+<%@page import="java.io.FileInputStream"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.*"%>
+<%@page import="java.util.*"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!doctype html>
+<html>
+<head>
+<title> Faculty | Study Material </title>
+<link href="reg_stud.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<nav>
+<a href="Faculty_profile.jsp"><i class="fa fa-home" aria-hidden="true"></i>HOME</a>
+<a href="ViewStudent.jsp"><i class="fa fa-users" aria-hidden="true"></i>STUDENTS</a>
+<a class="selected" href="CStudyMaterial.jsp"><i class="fa fa-file-text" aria-hidden="true"></i>STUDY MATERIAL</a>
+<a href="FacultyDoubts.jsp"><i class="fa fa-question-circle" aria-hidden="true"></i>DOUBTS</a>
+<a href="FacultyNews.jsp"><i class="fa fa-bell" aria-hidden="true"></i>ANNOUNCEMENTS</a>
+<div class="right">
+<a href="ProfileEdit.jsp" align="right"><i class="fa fa-pencil " aria-hidden="true"></i> EDIT PROFILE </a>
+<a href="Main.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a>
+</div>
+</nav>
+<form method="post" name="form">
+<h2>Details of all Course</h2>
+<table border="1">
+<tr>
+<th>Subject ID</th>
+<th>Subject Name</th>
+<th>Semester</th>
+<th>Branch</th>
+<th>View uploaded files</th>
+<th>Upload New Material</th>
+</tr>
+<%
+String email=(String)session.getAttribute("email_id");
+try{
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection con=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+String sql="Select * from vc_faculty where email_id='"+email+"'";
+Statement st= con.createStatement();
+ResultSet rs=st.executeQuery(sql);
+rs=st.executeQuery(sql);
+rs.next();
+rs=st.executeQuery("Select sub_ject.sub_id,sub_ject.sub_name,sub_ject.branch,sub_ject.sem from (vc_faculty join sub_ject on vc_faculty.fname=sub_ject.fname) where vc_faculty.email_id='"+email+"' order by sub_ject.branch");
+int cou=0;
+String arr[]=new String[8];
+while(rs.next())
+{
+cou++;
+arr[cou]=rs.getString("sub_name");
+%>
+<center>
+<tr>
+<td><%=rs.getString("sub_id") %></td>
+<td><%=rs.getString("sub_name") %></td>
+<td><%=rs.getString("sem") %></td>
+<td><%=rs.getString("branch") %></td>
+<td><a href="View.jsp?sub_id=<%=rs.getString("sub_id") %>"><button type="button" class="delete">View</button></a></td>
+<td><a href="Check.jsp?sub_id=<%=rs.getString("sub_id") %>"><button type="button" class="delete">Upload</button></a></td>
+</tr>
+<%
+}
+rs.close();
+st.close();
+con.close();
+}
+catch(Exception e) {
+e.printStackTrace();
+}
+%>
+</table>
+</center>
+</form>
+</body>
+</html>
+
+check
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.util.Iterator"%>
+<%@page import="java.util.List"%>
+<%@page import="java.io.File"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.DriverManager"%>
+<%@ page import="javax.servlet.http.*" %>
+<%@ page import="org.apache.commons.fileupload.*" %>
+<%@ page import="org.apache.commons.fileupload.disk.*" %>
+<%@ page import="org.apache.commons.fileupload.servlet.*" %>
+<%@ page import="org.apache.commons.io.output.*" %>
+<html>
+<head>
+<title>Faculty | Upload New Lecture</title>
+<link rel="stylesheet" href="reg_stud.css" type="text/css" >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+.bg{
+background-color: lightblue;
+padding:50px;
+margin-left:400px;
+margin-right: 400px;
+border-color: black;
+border-radius: 20px;
+}
+</style>
+</head>
+<body>
+<nav>
+<a href="Faculty_profile.jsp"><i class="fa fa-home" aria-hidden="true"></i>HOME</a>
+<a href="ViewStudent.jsp"><i class="fa fa-users" aria-hidden="true"></i>STUDENTS</a>
+<a href="CStudyMaterial.jsp"><i class="fa fa-file-text" aria-hidden="true"></i>STUDY MATERIAL</a>
+<a href="FacultyDoubts.jsp"><i class="fa fa-comments " aria-hidden="true"></i>DOUBTS</a>
+<a href="FacultyNews.jsp"><i class="fa fa-bell" aria-hidden="true"></i>ANNOUNCEMENTS</a>
+<div class="right">
+<a href="ProfileEdit.jsp" align="right"><i class="fa fa-pencil " aria-hidden="true"></i> EDIT PROFILE </a>
+<a href="Main.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a>
+</div>
+</nav><br><br/><br><br/><br><br/>
+<center>
+<div class="bg">
+<form method="Post" enctype="multipart/form-data">
+<% try{
+String email=(String)session.getAttribute("email_id");
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+java.sql.Connection con =DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+String sql="Select * from vc_faculty where email_id='"+email+"'";
+Statement st= con.createStatement();
+ResultSet rs=st.executeQuery(sql);
+String subname="";
+while(rs.next())
+{
+%>
+<input type="file" name="file" /><span></span><br><br/>
+<input type="submit" name="upload"value="Upload" />
+</form> </div> </center>
+<script>
+let input=document.querySelector('input');
+let span=document.querySelector('span');
+input.addEventListener('change',() =>
+{
+let files=input.files;
+if(files.length>0)
+{
+if(files[0].size>52428800)
+{
+span.innerText='File size exceeds. Must be less than 50 MB';
+return;
+}
+}
+}
+)
+</script>
+<%
+int no=Integer.parseInt(request.getParameter("sub_id"));
+int sumcount=0;
+File file ;
+int maxFileSize = 52428800;
+int maxMemSize =52428800;
+String filePath = "c:/apache-tomcat/webapps/data/";
+String contentType = request.getContentType();
+try{
+if ((contentType.indexOf("multipart/form-data") >= 0))
+{
+DiskFileItemFactory factory = new DiskFileItemFactory();
+factory.setSizeThreshold(maxMemSize);
+factory.setRepository(new File("c:\\temp"));
+ServletFileUpload upload = new ServletFileUpload(factory);
+upload.setSizeMax( maxFileSize );
+try{
+List fileItems = upload.parseRequest(request);
+Iterator i = fileItems.iterator();
+out.println("<html>");
+out.println("<body>");
+while ( i.hasNext () )
+{
+FileItem fi = (FileItem)i.next();
+if ( !fi.isFormField () )
+{
+String fieldName = fi.getFieldName();
+String fileName = fi.getName();
+boolean isInMemory = fi.isInMemory();
+long sizeInBytes = fi.getSize();
+file = new File( filePath + fileName ) ;
+String fp=filePath.concat(fileName);
+String fname=fileName.substring(0,fileName.indexOf("."));
+fi.write( file ) ;
+String ext=fileName.substring(fileName.indexOf(".")+1);
+if(!(ext.equals("css") ||ext.equals("js") ||ext.equals("png") ||ext.equals("jpg")||ext.equals("jpeg") ||ext.equals("txt") ||ext.equals("ppt")||ext.equals("pptx") ||ext.equals("docx")||ext.equals("pdf") ||ext.equals("mp4")))
+out.println("<script>alert('This file is not supported')</script>");
+else{
+int x=st.executeUpdate("insert into document(doc_name,doc_path,sub_id) values('"+fname+"','"+fp+"',"+no+")");
+if(x>0)
+{
+out.println("<script type=\"text/javascript\">");
+out.println("alert('File uploaded successfully');");
+out.println("location='CStudyMaterial.jsp';");
+out.println("</script>");
+}
+}
+}
+out.println("</body>");
+out.println("</html>");
+}
+}
+catch(Exception ex)
+{
+System.out.println(ex);
+}
+}
+else{
+out.println("<html>");
+out.println("<body>");
+out.println("<p>No file uploaded</p>");
+out.println("</body>");
+out.println("</html>");
+}
+}
+catch(Exception ex)
+{
+System.out.println(ex);
+}
+}
+}
+catch(Exception ex)
+{
+System.out.println(ex);
+}
+%>
+</body>
+</html>
+
+courses
+<%@page import="java.sql.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Admin | All Courses</title>
+<link rel="stylesheet" href="reg_stud.css" type="text/css" >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<nav>
+<a href="AdminHome.jsp"><i class="fa fa-home" aria-hidden="true"></i>HOME</a>
+<a class="selected" href="Courses.jsp"><i class="fa fa-book" aria-hidden="true"></i>COURSES</a>
+<a href="AddNewCourse.jsp"><i class="fa fa-plus-circle" aria-hidden="true"></i>ADD NEW COURSE</a>
+<div class="right"><a href="Main.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a></div></nav>
+<form method="post" name="form">
+<h2>Details of all Courses</h2>
+<table border="1">
+<tr>
+<th>Subject ID</th>
+<th>Subject Name</th>
+<th>Semester</th>
+<th>Branch</th>
+<th>Faculty</th>
+<th>Edit</th>
+<th>Delete</th>
+</tr>
+<%
+String pass1=(String)session.getAttribute("password1");
+try{
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement s= c.createStatement();
+String sql="select * from sub_ject";
+ResultSet rs= s.executeQuery(sql);
+while(rs.next())
+{
+%>
+<tr>
+<td><%=rs.getInt("sub_id") %></td>
+<td><%=rs.getString("sub_name") %></td>
+<td><%=rs.getInt("sem") %></td>
+<td><%=rs.getString("branch") %></td>
+<td><%=rs.getString("fname") %></td>
+<td><a href="EditCourses.jsp?sub_id=<%=rs.getInt("sub_id") %>"><button type="button" class="delete">Edit</button></a></td>
+<td><a href="DeleteCourses.jsp?sub_id=<%=rs.getInt("sub_id") %>"><button type="button" class="delete">Delete</button></a></td>
+</tr>
+<%
+}
+rs.close();
+s.close();
+c.close();
+}
+catch(Exception e) {
+e.printStackTrace();
+}
+%>
+</table>
+</body>
+</html>
+
+deleteannouncements
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.sql.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Admin | Delete Student</title>
+<link rel="stylesheet" href="style4.css" type="text/css" >
+</head>
+<body>
+<%
+try {
+int no=Integer.parseInt(request.getParameter("nid"));
+int sumcount=0
+;Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement s= c.createStatement();
+int x=s.executeUpdate("delete from announcements where nid="+no+" ");
+if(x>0)
+{
+out.println("<script type=\"text/javascript\">");
+out.println("alert('Announcement deleted successfully');");
+out.println("location='Announcements.jsp';");
+out.println("</script>");
+}
+else
+{
+out.print("<script>alert('Something went wrong.')</script>");
+}
+}
+catch(Exception e){}
+%>
+</body>
+</html>
+
+deletecourses
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.sql.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Admin | Delete Student</title>
+<link rel="stylesheet" href="style4.css" type="text/css" >
+</head>
+<body>
+<%
+try {
+int no=Integer.parseInt(request.getParameter("sub_id"));
+int sumcount=0;Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement s= c.createStatement();
+int x=s.executeUpdate("delete from sub_ject where sub_id="+no+" ");
+if(x>0)
+{
+out.println("<script type=\"text/javascript\">");
+out.println("alert('Subject deleted successfully');");
+out.println("location='Courses.jsp';");
+out.println("</script>");
+}
+else
+{
+out.print("<script>alert('Something went wrong.')</script>");
+}
+}
+catch(Exception e){}
+%>
+</body>
+</html>
+
+deletedoubts
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.sql.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Admin | Delete Doubts</title>
+<link rel="stylesheet" href="style4.css" type="text/css" >
+</head>
+<body>
+<%
+try {
+int did=Integer.parseInt(request.getParameter("did"));
+int sumcount=0;
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement s= c.createStatement();
+String query = "select * from doubts where did="+did+" ";
+ResultSet rs = s.executeQuery(query);
+// String sql=" Select sub_id from doubts where d_id="+did+" ";
+// ResultSet rs=s.executeQuery(sql);
+rs.next();
+int sid=rs.getInt("sub_id");
+out.println(sid);
+int x=s.executeUpdate("delete from doubts where did="+did+" ");
+if(x>0)
+{
+response.sendRedirect("ViewDoubts.jsp?sub_id="+sid);
+// out.println("<script type=\"text/javascript\">");
+out.println("<script>alert('Subject deleted successfully')</script>");
+// out.println("location='Doubts.jsp';");
+// out.println("</script>");
+}
+else
+{
+out.print("<script>alert('Something went wrong.')</script>");
+}
+}
+catch(Exception e){}
+%>
+
+<%/*
+try {
+int no=Integer.parseInt(request.getParameter("sub_id"));
+int sumcount=0;
+Class.forName("com.mysql.jdbc.Driver");
+
+Connection c=
+DriverManager.getConnection("jdbc:mysql://localhost:3306/student?zeroDateTimeBehaviour=convertT
+oNull","root","root");
+
+Statement s= c.createStatement();
+int did=Integer.parseInt(request.getParameter("d_id"));
+int x=s.executeUpdate("delete from doubts where d_id="+did+" ");
+if(x>0)
+{
+out.println("<script type=\"text/javascript\">");
+out.println("alert('Subject deleted successfully');");
+out.println("location='Doubts.jsp';");
+out.println("</script>");
+}
+else
+{
+out.print("<script>alert('Something went wrong.')</script>");
+}
+}
+catch(Exception e){}*/
+%>
+</body>
+</html>
+
+
+deletefaculty
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.sql.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Admin | Delete Student</title>
+<link rel="stylesheet" href="style4.css" type="text/css" >
+</head>
+<body>
+<%
+try {
+int no=Integer.parseInt(request.getParameter("fid"));
+int sumcount=0;
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement st= c.createStatement();
+int x=st.executeUpdate("delete from vc_faculty where fid="+no+" ");
+if(x>0)
+{
+out.println("<script type=\"text/javascript\">");
+out.println("alert('Faculty deleted successfully');");
+out.println("location='Faculty.jsp';");
+out.println("</script>");
+}
+else
+{
+out.print("<script>alert('Something went wrong.')</script>");
+}
+}
+catch(Exception e){}
+%>
+</body>
+</html>
+
+
+deletestudymaterial
+<%@page language="java"%>
+<%@page import="java.sql.*"%>
+<html>
+<head>
+<title>Faculty | View Study Material</title>
+<link rel="stylesheet" href="reg_stud.css" type="text/css" >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<nav>
+<a href="Faculty_profile.jsp">HOME</a>
+<a href="UploadStudyMaterial.jsp">UPLOAD NEW LECTURE</a>
+<a href="#">VIDEO</a>
+<a href="FacultyDoubts.jsp">DOUBTS</a>
+<a href="FacultyNews.jsp">NEWS</a>
+<div class="right"><a href="ProfileEdit.jsp" align="right">EDIT PROFILE <img src="D:\Image\editicon1.jpg" height=20px align="center" background="lightblue"></a>
+<a href="FacultyLogin.jsp">LOGOUT</a></div>
+</nav>
+<form method="post">
+<%
+try {
+int no=Integer.parseInt(request.getParameter("doc_id"));
+int sumcount=0;
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement st = c.createStatement();
+String query = "select * from document where doc_id="+no+" ";
+ResultSet rs = st.executeQuery(query);
+// String sql=" Select sub_id from doubts where d_id="+did+" ";
+// ResultSet rs=s.executeQuery(sql);
+rs.next();
+int sid=rs.getInt("sub_id");
+out.println(sid);
+int x=st.executeUpdate("delete from document where doc_id="+no+" ");
+if(x>0)
+{
+response.sendRedirect("View.jsp?sub_id="+sid);
+// out.println("<script type=\"text/javascript\">");
+out.println("<script>alert('Subject deleted successfully')</script>");
+//out.println("<script type=\"text/javascript\">");
+// out.println("alert('Study Material deletd successfully');");
+// out.println("location='CStudyMaterial.jsp';");
+// out.println("</script>");
+}
+else
+{
+out.print("<script>alert('Something went wrong.')</script>");
+}
+}
+catch(Exception e){}
+%>
+</form>
+</body>
+</html>
+
+doubts
+<%@page import="java.sql.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Admin | All Courses</title>
+<link rel="stylesheet" href="reg_stud.css" type="text/css" >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<nav>
+<a href="AdminHome.jsp"><i class="fa fa-home" aria-hidden="true"></i>HOME</a>
+<a href="Student.jsp"><i class="fa fa-users" aria-hidden="true"></i>STUDENTS</a>
+<a href="Faculty.jsp"><i class="fa fa-users" aria-hidden="true"></i>FACULTIES</a>
+<a href="Courses.jsp"><i class="fa fa-book" aria-hidden="true"></i>COURSES</a>
+<a class="selected" href="Doubts.jsp"><i class="fa fa-question-circle" aria-hidden="true"></i>DOUBTS</a>
+<a href="Announcements.jsp"><i class="fa fa-bell" aria-hidden="true"></i>ANNOUNCEMENTS</a>
+<div style="text-align:right;float:right;"><a href="Main.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a></div>
+</nav>
+<form method="post" name="form">
+<h2>Details of all Courses</h2>
+<table border="1">
+<tr>
+<th>Subject ID</th>
+<th>Subject Name</th>
+<th>Semester</th>
+<th>Branch</th>
+<th>View</th>
+</tr>
+<%
+String pass1=(String)session.getAttribute("password1");
+try{
+
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement s= c.createStatement();
+String sql="select * from sub_ject";
+ResultSet rs= s.executeQuery(sql);
+while(rs.next())
+{
+%>
+<tr>
+<td><%=rs.getInt("sub_id") %></td>
+<td><%=rs.getString("sub_name") %></td>
+<td><%=rs.getInt("sem") %></td>
+<td><%=rs.getString("branch") %></td>
+<td><a href="ViewDoubts.jsp?sub_id=<%=rs.getInt("sub_id") %>"><button type="button" class="delete">View</button></a></td>
+</tr>
+<%
+}
+rs.close();
+s.close();
+c.close();
+}
+catch(Exception e) {
+e.printStackTrace();
+}
+%>
+</table>
+</body>
+</html>
+
+
+editcourses
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<title>Admin | Edit Courses</title>
+<link rel="stylesheet" href="style.css" type="text/css" >
+</head>
+<body>
+<%
+try{
+int no=Integer.parseInt(request.getParameter("sub_id"));
+int sumcount=0;
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement s= c.createStatement();
+String query = "select * from sub_ject where sub_id="+no+"";
+ResultSet rs=s.executeQuery(query);
+if(rs.next())
+{
+%>
+<form method="Post">
+<nav>
+<a href="AdminHome.jsp"><i class="fa fa-home" aria-hidden="true"></i>HOME</a>
+<a href="Courses.jsp"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>BACK</a>
+<div style="text-align:right;float:right;"><a href="Main.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a></div>
+</nav>
+<div class="container">
+<hr>
+<label for="email"><b>Subject name</b></label>
+<input type="text" name="Subject" value="<%=rs.getString("sub_name")%>" placeholder="Enter Subject name" required/> <br/>
+<label for="email"><b>Semester</b></label>
+<input type="text" name="Semester" value="<%=rs.getInt("sem")%>" placeholder="Enter Semester" required/> <br/>
+<label for="email"><b>Branch</b></label>
+<input type="text" name="Branch" value="<%=rs.getString("branch")%>" placeholder="Enter Branch" required/> <br/>
+<label for="email"><b>Faculty name</b></label>
+<input type="text" name="Faculty" value="<%=rs.getString("fname")%>" placeholder="Enter Faculty name" required/> <br/>
+</hr>
+<button type="submit" class="updatebtn" name="btnUpdate" value="Update">Update</button>
+</div>
+<%
+}
+try{
+if(request.getParameter("btnUpdate")!=null)
+{
+String name_up=request.getParameter("Subject");
+int sem_up=Integer.parseInt(request.getParameter("Semester"));
+String branch_up=request.getParameter("Branch");
+String f_up=request.getParameter("Faculty");
+String sql1="update sub_ject set sub_name=? ,sem=?,branch=? , fname=? where sub_id="+no+"";
+PreparedStatement ps=c.prepareStatement(sql1);
+ps.setString(1,name_up);
+ps.setInt(2,sem_up);
+ps.setString(3,branch_up);
+ps.setString(4,f_up);
+ps.executeUpdate();
+if(ps.executeUpdate()>=1)
+{
+out.println("<script type=\"text/javascript\">");
+out.println("alert('Subject is updated successfully');");
+out.println("location='Courses.jsp';");
+out.println("</script>");
+}
+}
+} catch (SQLException exx) {
+exx.printStackTrace(response.getWriter());
+}
+rs.close();
+s.close();
+c.close();
+} catch (Exception e) {
+e.printStackTrace();
+}
+%>
+</form>
+</body>
+</html>
+
+
+faculty
+<%@page import="java.sql.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Admin | Registered Faculties</title>
+<link rel="stylesheet" href="reg_stud.css" type="text/css" >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<nav>
+<a href="AdminHome.jsp"><i class="fa fa-home" aria-hidden="true"></i>HOME</a>
+<a href="Student.jsp"><i class="fa fa-users" aria-hidden="true"></i>STUDENTS</a>
+<a class="selected" href="Faculty.jsp"><i class="fa fa-users" aria-hidden="true"></i>FACULTIES</a>
+<a href="Courses.jsp"><i class="fa fa-book" aria-hidden="true"></i>COURSES</a>
+<a href="Doubts.jsp"><i class="fa fa-question-circle" aria-hidden="true"></i>DOUBTS</a>
+<a href="Announcements.jsp"><i class="fa fa-bell" aria-hidden="true"></i>ANNOUNCEMENTS</a>
+<div class="right"><a href="Main.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a></div>
+</nav>
+<form method="post" name="form">
+<h2>Details of all Registered Faculties</h2>
+<table border="1">
+<tr>
+<th>Faculty ID</th>
+<th>Faculty Name</th>
+<th>Email-id</th>
+<th>Contact details</th>
+<th>Delete</th>
+<th>Verify</th>
+</tr>
+<%
+String pass1=(String)session.getAttribute("password1");
+try{
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement s= c.createStatement();
+String sql="select * from vc_faculty";
+ResultSet rs= s.executeQuery(sql);
+while(rs.next())
+{
+%>
+<tr>
+<td><%=rs.getString("fid") %></td>
+<td><%=rs.getString("fname") %></td>
+<td><%=rs.getString("email_id") %></td>
+<td><%=rs.getString("ph_no") %></td>
+<td><a href="DeleteFaculty.jsp?fid=<%=rs.getInt("fid") %>"><button type="button" class="delete">Delete</button></a></td>
+<td><a href="verifyFaculty.jsp?fid=<%=rs.getInt("fid") %>"><button type="button" class="delete">Verify</button></a></td>
+</tr>
+<%
+}
+rs.close();
+s.close();
+c.close();
+}
+catch(Exception e) {
+e.printStackTrace();
+}
+%>
+</table>
+</form>
+</body>
+</html>
+
+
+facultydeletedoubts
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.sql.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Faculty | Delete Doubts</title>
+<link rel="stylesheet" href="style4.css" type="text/css" >
+</head>
+<body>
+<%
+try {
+int did=Integer.parseInt(request.getParameter("did"));
+int sumcount=0;
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement s= c.createStatement();
+String query = "select * from doubt where did="+did+" ";
+ResultSet rs = s.executeQuery(query);
+rs.next();
+int sid=rs.getInt("sub_id");
+out.println(sid);
+int x=s.executeUpdate("delete from doubt where d_id="+did+" ");
+if(x>0)
+{
+response.sendRedirect("doubtsquestion_faculty.jsp?sub_id="+sid);
+out.println("<script>alert('Doubts deleted successfully')</script>");
+}
+else
+{
+out.print("<script>alert('Something went wrong.')</script>");
+}
+}
+catch(Exception e){}
+%>
+</body>
+</html>
+
+
+facultydoubts
+<%@page import="java.io.File"%>
+<%@page import="java.io.OutputStream"%>
+<%@page import="java.io.IOException"%>
+<%@page import="java.io.FileInputStream"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.*"%>
+<%@page import="java.util.*"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!doctype html>
+<html>
+<head>
+<title> Faculty | Doubts </title>
+<link href="reg_stud.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<nav>
+<a href="Faculty_profile.jsp"><i class="fa fa-home" aria-hidden="true"></i>HOME</a>
+<a href="ViewStudent.jsp"><i class="fa fa-users" aria-hidden="true"></i>STUDENTS</a>
+<a href="CStudyMaterial.jsp"><i class="fa fa-file-text" aria-hidden="true"></i>STUDY MATERIAL</a>
+<a class="selected" href="FacultyDoubts.jsp"><i class="fa fa-question-circle" aria-hidden="true"></i>DOUBTS</a>
+<a href="FacultyNews.jsp"><i class="fa fa-bell" aria-hidden="true"></i>ANNOUNCEMENTS</a>
+<div class="right">
+<a href="ProfileEdit.jsp" align="right"><i class="fa fa-pencil " aria-hidden="true"></i> EDIT PROFILE </a>
+<a href="Main.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a>
+</div>
+</nav>
+<form method="post" name="form">
+<h2>Details of all Course</h2>
+<table border="1">
+<tr>
+<th>Subject ID</th>
+<th>Subject Name</th>
+<th>Semester</th>
+<th>Branch</th>
+<th>View</th>
+</tr>
+<%
+String email=(String)session.getAttribute("email_id");
+try{
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+String sql="Select * from vc_faculty where email_id='"+email+"'";
+Statement st= c.createStatement();
+ResultSet rs=st.executeQuery(sql);
+rs=st.executeQuery(sql);
+rs.next();
+rs=st.executeQuery("Select sub_ject.sub_id,sub_ject.sub_name,sub_ject.branch,sub_ject.sem from (vc_faculty join sub_ject on vc_faculty.fname=sub_ject.fname) where vc_faculty.email_id='"+email+"' order by sub_ject.branch");
+int cou=0;
+String arr[]=new String[8];
+while(rs.next())
+{
+cou++;
+arr[cou]=rs.getString("sub_name");
+%>
+<tr>
+<td><%=rs.getString("sub_id") %></td>
+<td><%=rs.getString("sub_name") %></td>
+<td><%=rs.getString("sem") %></td>
+<td><%=rs.getString("branch") %></td>
+<td><a href="doubtsquestion_faculty.jsp?sub_id=<%=rs.getString("sub_id") %>"><button type="button" class="delete">View</button></a></td>
+</tr>
+<%
+}
+rs.close();
+st.close();
+c.close();
+}
+catch(Exception e) {
+e.printStackTrace();
+}
+%>
+</table>
+</form>
+</body>
+</html>
+
+facultyforgetpassword
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Faculty | Forgot Password </title>
+<style>
+.container{
+width:30%;
+height:350px;
+border:solid;
+border-width:1px;
+border-color:blue;
+box-shadow:3px 2px 2px 3px #808080;
+}
+input[type=text], input[type=password], input[type=number]{
+  width: 40%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+h1{
+color:black;
+text-shadow:-1px 0 blue, 0 1px blue , 1px 0 blue,0 -1px blue;
+}
+.button1 {
+  background-color: dodgerblue;
+  color: white;
+  padding: 12px 15px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 25%;
+  opacity: 0.9;
+}
+
+.button1:hover {
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+    <form method="Post">
+<h1 align="center"> Lets Find Your Account</h1>
+<hr style="width:100%;text-align:left;margin-left:0">
+</br></br>
+<center>
+<div class="container">
+<h2> Forgot Password</h2></br>
+No Problem! Enter your email below</br></br>
+<input type="text" name="email" placeholder="Enter email" required/></br>
+<button class="button1" name="search"><span>Search</span></button></br> </br>
+Back to <a href="FacultyLogin.jsp">Login</a>
+</div>
+</center>
+<%
+    try{
+        if(request.getParameter("search")!=null)
+        {
+            String username=request.getParameter("email");
+            session.setAttribute("email_id",username);
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+    java.sql.Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+     Statement st= con.createStatement();
+            ResultSet rs=st.executeQuery("select * from vc_faculty where email_id='"+username+"'");
+            if(rs.next())
+            {
+                response.sendRedirect("security_answer.jsp");
+            }
+            else
+            {
+                out.println("<script>alert('Email not found')</script> ");
+            }
+        }
+}catch (Exception e) {
+        e.printStackTrace();
+    }
+  %>          
+    </form>
+</body>
+</html>
+
+
+facultylogin
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.*"%>
+<%@page import="java.util.*"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Faculty | Login</title>
+<link rel="stylesheet" href="login_student.css" type="text/css" >
+</head>
+<body>
+<nav>
+<a class="selected" href="FacultyLogin.jsp"> Faculty Login </a>
+<a href="#" style="text-align:right;float:right;">Contact Us-<span style="color: cyan">9987643456</span></a>
+</nav>
+<main style="background-image: url(adminhome.jpg)">
+<section>
+<h3>Faculty Login</h3>
+<center><h4>Enter valid credentials</h4></center>
+<center>
+<form method="post">
+Email&nbsp; &nbsp; &nbsp; &nbsp;
+<input type="text" name="user_email" placeholder="enter username" align="middle" required></br> </br>
+Password&nbsp;
+<input type="password" name="password" placeholder="enter password" align="middle"
+required></br></br>
+<button class="button1" name="log_in" value="logged_in">Login</button></br> </br>
+<a href="Facultyforgotpassword.jsp">Forgot Password?</a></br></br>
+If not Registered then <a href="FacultyRegistration.jsp">Register</a>
+<%
+try{
+if(request.getParameter("log_in")!=null)
+{
+String user=request.getParameter("user_email");
+String password=request.getParameter("password");
+session.setAttribute("email_id",user);
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+java.sql.Connection con =DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement st= con.createStatement();
+ResultSet rs=st.executeQuery("select * from vc_faculty where email_id='"+user+"' and pass='"+password+"'");
+try{
+if(rs.next())
+{
+if(rs.getString("pass").equals(password) && rs.getString("email_id").equals(user) && rs.getInt("status")==1)
+{
+response.sendRedirect("Faculty_profile.jsp");
+}
+else if(rs.getInt("status")!=1)
+{
+out.println("<script> alert('You cannot login until you are verified by admin')</script>");
+}
+}
+else
+{
+out.print("<script>alert('Invalid password or username.')</script>");
+}
+}
+catch (Exception e) {
+e.printStackTrace();
+}
+}
+}
+catch (Exception e) {
+e.printStackTrace();
+}
+%>
+</form>
+</center>
+</section>
+</main>
+<footer>
+<a href="TermsOfUse.jsp">Terms of Use</a>
+<a href="PrivacyPolicy.jsp">Privacy Policy</a>
+<a href="#">&copy; 2021</a>
+</footer>
+</body>
+</html>
+
+
+facultylogout
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<!DOCTYPE html>
+<%
+session.invalidate();
+response.sendRedirect("FacultyLogin.jsp");
+%>
+
+facultynews
+<%@page import="java.sql.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Faculty | Announcements</title>
+<link rel="stylesheet" href="reg_stud.css" type="text/css" >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<nav>
+<a href="Faculty_profile.jsp"><i class="fa fa-home" aria-hidden="true"></i>HOME</a>
+<a href="ViewStudent.jsp"><i class="fa fa-users" aria-hidden="true"></i>STUDENTS</a>
+<a href="CStudyMaterial.jsp"><i class="fa fa-file-text" aria-hidden="true"></i>STUDY MATERIAL</a>
+<a href="FacultyDoubts.jsp"><i class="fa fa-question-circle" aria-hidden="true"></i>DOUBTS</a>
+<a class="selected" href="FacultyNews.jsp"><i class="fa fa-bell" aria-hidden="true"></i>ANNOUNCEMENTS</a>
+<div class="right">
+<a href="ProfileEdit.jsp" align="right"><i class="fa fa-pencil " aria-hidden="true"></i> EDIT PROFILE </a>
+<a href="Main.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a>
+</div>
+</nav>
+<h2>All Announcements </h2>
+<table border="1">
+<tr>
+<th>Notice ID</th>
+<th>Notice</th>
+<th>Date of announcement</th>
+</tr>
+<%
+try{
+String email=(String)session.getAttribute("email_id");
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+java.sql.Connection con =DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement s= con.createStatement();
+String sql="select * from announcements";
+ResultSet rs= s.executeQuery(sql);
+while(rs.next())
+{
+%>
+<tr>
+<td><%=rs.getString("nid") %></td>
+<td><%=rs.getString("notice") %></td>
+<td><%=rs.getString("date") %></td>
+</tr>
+<%
+}
+rs.close();
+s.close();
+con.close();
+}
+catch(Exception e) {
+e.printStackTrace();
+}
+%>
+</table>
+</body>
+</html>
+
+facultyregistration
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Faculty | Registration</title>
+<link rel="stylesheet" href="Student_register.css" type="text/css" >
+<script>
+function validate(){
+var name=document.getElementById('f_name').value;
+var email_id=document.getElementById('email').value;
+var pn=document.getElementById('pn').value;
+var password=document.getElementById('pass').value;
+var c_password=document.getElementById('c_pass').value;
+var emailRGEX=/^\w+\.?\w+@[a-zA-Z_]+\.[a-zA-Z]{2,5}$/i ;
+var urREGX=/[A-Za-z]+\s/;
+var emailResult = emailRGEX.test(email_id);
+var nameResult = urREGX.test(name);
+var pn=document.getElementById('pn').value;
+var pnRGEX=/^((?!(0))[0-9]{10})$/;
+var pnResult= pnRGEX.test(pn);
+if(pnResult == false)
+{
+alert('Enter valid phone number ');
+return false;
+}
+if(emailResult == false)
+{
+document.getElementById('email').style.backgroundColor='#FFFF99';
+alert('invalid email');
+return false;
+}
+if(nameResult == false)
+{
+document.getElementById('f_name').style.backgroundColor='#FFFF99';
+alert('invalid First name');
+return false;
+}
+if(pn.length!=10)
+{
+alert('Phone number must be 10 digit long');
+return false;
+}
+if(password.length <8)
+{
+document.getElementById('pass').style.backgroundColor='#FFFF99';
+alert('Password must be more or 8 charachters long ');
+return false;
+}
+if(password !== c_password)
+{
+alert('password does not match ');
+return false;
+}
+return true;
+}
+</script>
+</head>
+<body>
+<center>
+<form method="Post" onsubmit="return validate()">
+<center>
+<div class="container">
+<h1>Register</h1>
+<p>Please fill in this form to create an account.</p>
+<hr>
+<label for="email"><b>Name</b></label>
+<input type="text" id="f_name" name="name" placeholder="Enter name" required/> <br/>
+<label for="email"><b>Email</b></label>
+<input type="text" id="email" name="e-mail" placeholder="Enter email" required/> <br/>
+<label for="email"><b>Password</b></label>
+<input type=password id="pass" name="pass" placeholder="Enter password" required/> <br/>
+<label for="email"><b>Re-enter Password</b></label>
+<input type=password id="c_pass" name="pass" placeholder="Enter password" required/> <br/>
+<label for="email"><b>Phone Number</b></label>
+<input type="number" id="pn" name="ph_no" placeholder="Enter phone number" required/> <br/>
+<label for="email"><b>Enter a security question</b></label>
+<input type="text" name="question" placeholder="Enter question" required/> <br/>
+<label for="email"><b>Enter answer to the security question</b></label>
+<input type="text" name="answer" placeholder="Enter answer" required/> <br/>
+</hr>
+<p>By creating an account you agree to our Terms & Privacy</a>.</p>
+<button type="submit" class="registerbtn" name="btnInsert" value="Insert">Register</button>
+</div>
+<div class.="container signin">
+<p>Already have an account? <a href="FacultyLogin.jsp">Login</a>.</p>
+</div>
+</center>
+<%
+try{
+if(request.getParameter("btnInsert")!=null)
+{
+String n=request.getParameter("name");
+String p=request.getParameter("pass");
+String e=request.getParameter("e-mail");
+long pn=Long.parseLong(request.getParameter("ph_no"));
+String que=request.getParameter("question");
+String ans=request.getParameter("answer");
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+java.sql.Connection con =DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+System.out.println("Connected Successfully");
+Statement st = con.createStatement();
+int x=st.executeUpdate("insert into vc_faculty(email_id,fname,ph_no,pass,sec_ques,sec_ans) values('"+e+"','"+n+"',"+pn+",'"+p+"','"+que+"','"+ans+"')");
+if(x>0)
+st.close();
+con.close();
+if(e.isEmpty() || n.isEmpty() || p.isEmpty() || que.isEmpty() || ans.isEmpty() ||pn==0)
+{
+response.sendRedirect("FacultyRegistration.jsp");
+}
+else
+{
+out.print("<script>alert('Please wait for admin verification')</script>");
+/*
+session.setAttribute("email_id",e);
+response.sendRedirect("Faculty_profile.jsp");*/
+}
+}
+} catch (SQLException exx) {
+exx.printStackTrace();
+out.println("something wrong");
+}
+%>
+</form>
+</center>
+</body>
+</html>
+
+facultyprofile
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.*"%>
+<%@page import="java.util.*"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Faculty | Profile </title>
+<link href="Student_profile.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<form method="Post">
+<nav>
+<a class="selected" href="Faculty_profile.jsp"><i class="fa fa-home" aria-hidden="true"></i>HOME</a>
+<a href="ViewStudent.jsp"><i class="fa fa-users" aria-hidden="true"></i>STUDENTS</a>
+<a href="CStudyMaterial.jsp"><i class="fa fa-file-text" aria-hidden="true"></i>STUDY MATERIAL</a>
+<a href="FacultyDoubts.jsp"><i class="fa fa-question-circle" aria-hidden="true"></i></i>DOUBTS</a>
+<a href="FacultyNews.jsp"><i class="fa fa-bell" aria-hidden="true"></i>ANNOUNCEMENTS</a>
+<div class="right">
+<a href="ProfileEdit.jsp" align="right"><i class="fa fa-pencil " aria-hidden="true"></i> EDIT PROFILE </a>
+<a href="Main.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a>
+</div>
+</nav>
+<table height=100% width=100%>
+<tr>
+<td width=20% valign="top">
+<div class="column1">
+<img src="profile_2.png" height=120px width=130px>
+<h3> Logged in as: </h3>
+<%
+String email=(String)session.getAttribute("email_id");
+out.println("<h3>"+email+"</h3>");
+%>
+</div>
+</td>
+<td height=100% width=100%>
+<div class=container>
+<div class="cd">
+<%
+try{
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+java.sql.Connection con =DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+String sql="Select fname from vc_faculty where email_id='"+email+"'";
+Statement st= con.createStatement();
+ResultSet rs=st.executeQuery(sql);
+rs=st.executeQuery(sql);
+rs.next();
+out.println("<h4>"+"Name: "+rs.getString(1)+"</h4>");
+st.close();
+con.close();
+}catch(Exception e ){
+out.println("error in name");
+System.out.println("error in name");
+}
+%>
+</div>
+<div class="cd1">
+<%
+try{
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+java.sql.Connection con =DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+String sql="Select fname from vc_faculty where email_id='"+email+"'";
+Statement st= con.createStatement();
+ResultSet rs=st.executeQuery(sql);
+rs=st.executeQuery("Select sub_ject.sub_name,sub_ject.branch,sub_ject.sem from (vc_faculty join sub_ject on vc_faculty.fname=sub_ject.fname) where vc_faculty.email_id='"+email+"' order by sub_ject.SUB_NAME");
+int count=0;
+while(rs.next())
+{
+count++;
+%>
+<center>
+<table>
+<tr>
+<td>
+<%
+out.print("<h5>"+"Subject "+count+":</h5>");
+%>
+</td>
+<td>
+<%
+out.print("<h5>"+rs.getString("sub_name")+" Semester: " +rs.getString("sem")+ " Branch: "
++rs.getString("branch")+"</h5>");
+%>
+</td>
+</tr>
+</table>
+</center>
+<%
+}
+st.close();
+con.close();
+rs.close();
+}catch(Exception e ){
+out.println("error in subject");
+System.out.println("error in subject");
+}
+%>
+</div>
+<div class="cd">
+<%
+try{
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+java.sql.Connection con =DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+String sql="Select fname from vc_faculty where email_id='"+email+"'";
+Statement st= con.createStatement();
+ResultSet rs=st.executeQuery(sql);
+rs=st.executeQuery("Select ph_no from vc_faculty where email_id='"+email+"'");
+rs.next();
+out.println("<h4>"+"Phone Number: "+rs.getString(1)+"</h4>");
+st.close();
+con.close();
+rs.close();
+}catch(Exception e ){
+out.println("error in phone number");
+System.out.println("error in phone number");
+}
+%>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</form>
+</body>
+</html>
+
+main
+<%@page import="java.sql.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Virtual Classroom | Home</title>
+<link rel="stylesheet" href="login_student.css" type="text/css" >
+</head>
+<body>
+<nav>
+<a href="VC_Student_login.jsp">Student Login</a>
+<a href="FacultyLogin.jsp">Faculty Login</a>
+<a href="#" style="text-align:right;float:right;">Contact Us-<span style="color: cyan">9987643456</span> </a>
+</nav>
+<main style="background-image: url(main-img1.png)">
+<section>
+<h3>Admin Login</h3><br/>
+<center><h4>Enter valid credentials</h4></center><br/>
+<form method="Post">
+<center>
+<input type="password" name="password1" placeholder="enter password"
+required><br/><br/>
+<button class="button1" name="btnlogin" value="login"><span>Login</span></button>
+</center>
+<%
+if(request.getParameter("btnlogin")!=null)
+{
+
+try{
+String user=request.getParameter("password1");
+session.setAttribute("password",user);
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection con=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+
+Statement s = con.createStatement();
+String pass1=request.getParameter("password1");
+
+String sql="select pass from admin";
+ResultSet rs= s.executeQuery(sql);
+rs.next();
+//out.println(pass1);
+//out.println("from data"+rs.getString(1));
+if( (!pass1.isEmpty()) && rs.getString(1).equalsIgnoreCase(pass1) )
+{
+response.sendRedirect("AdminHome.jsp");
+}
+else
+{
+out.print("<script>alert('Try with correct password.')</script>");
+}
+rs.close();
+s.close();
+con.close();
+
+}
+catch(Exception e) {
+e.printStackTrace();
+}
+}
+%>
+</form>
+</section>
+</main>
+<footer>
+<a href="TermsOfUse.jsp">Terms of Use</a>
+<a href="PrivacyPolicy.jsp">Privacy Policy</a>
+<a href="#">&copy; 2021</a>
+</footer>
+</body>
+</html>
+
+
+privacypolicy
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Privacy Policy</title>
+        <style>
+        .container{
+width:30%;
+height:450px;
+border:solid;
+border-width:1px;
+border-color:navy;
+box-shadow:3px 2px 2px 3px #808080;
+        background-color: lightblue;
+  padding: 25px;
+}
+       
+</style>
+<link rel="stylesheet" href="reg_stud.css" type="text/css" >
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
+    </head>
+    <body>
+            <nav>
+        <a href="Main.jsp">BACK</a>
+    </nav>
+        <br>
+    <center>
+        <div class="container"><br>
+                    <h2>Hello User</h2>
+            The website cares about your privacy and wants you to be familiar with how we collect, use, and disclose data.<br/>
+            Please note that any information or materials you post or disclose on this Site via registration, profile pages
+            and other services
+            will be seen by other visitors to this Site.
+            You should consider this when deciding to disclose any personal data or any other information on this Site.<br/>
+            We use reasonable organizational, technical, and administrative measures to protect data under our control.
+            Unfortunately, no data transmission over the internet or data storage system can be guaranteed to be 100% secure.
+            If you feel that the security of any data that we hold about you has been compromised,
+            please immediately notify us of the problem by contacting us in accordance with the “Contact Us” section below.
+        </div>
+    </center>
+        <footer>
+        <a href="#">Terms of Use</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">&copy; 2021</a>
+        </footer>
+    </body>
+</html>
+
+
+profileedit
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Faculty | Profile Edit</title>
+<link rel="stylesheet" href="edit.css" type="text/css" >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script>
+function validate()
+{
+var pn=document.getElementById('pn').value;
+var password=document.getElementById('pass').value;
+var name=document.getElementById('f_name').value;
+var urREGX=/[A-Za-z]+\s/;
+var nameResult = urREGX.test(name);
+var pn=document.getElementById('pn').value;
+var pnRGEX=/^((?!(0))[0-9]{10})$/;
+var pnResult= pnRGEX.test(pn);
+if(pnResult == false)
+
+{
+alert('Enter valid phone number ');
+return false;
+}
+if(nameResult == false)
+{
+document.getElementById('f_name').style.backgroundColor='#FFFF99';
+alert('invalid Name');
+return false;
+}
+if(pn.length!=10)
+{
+alert('Phone number must be 10 digit long');
+return false;
+}
+if(password.length <8)
+{
+document.getElementById('pass').style.backgroundColor='#FFFF99';
+alert('Password must be more or 8 charachters long ');
+return false;
+}
+return true;
+}
+</script>
+</head>
+<body>
+<%
+String email=(String)session.getAttribute("email_id");
+try{
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+java.sql.Connection con =DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+String sql="Select * from vc_faculty where email_id='"+email+"'";
+Statement st= con.createStatement();
+String e="",quest="",answ="";
+ResultSet rs=st.executeQuery(sql);
+rs=st.executeQuery(sql);
+if(rs.next())
+{
+e=rs.getString("email_id");
+quest=rs.getString("sec_ques");
+answ=rs.getString("sec_ans");
+%>
+<form method="Post" onchange="return validate()">
+<nav>
+<a href="Faculty_profile.jsp"><i class="fa fa-home" aria-hidden="true"></i>HOME</a>
+<a href="ViewStudent.jsp"><i class="fa fa-users" aria-hidden="true"></i>STUDENTS</a>
+<a href="CStudyMaterial.jsp"><i class="fa fa-file-text" aria-hidden="true"></i>STUDY MATERIAL</a>
+<a href="FacultyDoubts.jsp"><i class="fa fa-question-circle" aria-hidden="true"></i>DOUBTS</a>
+<a href="FacultyNews.jsp"><i class="fa fa-bell" aria-hidden="true"></i>ANNOUNCEMENTS</a>
+<div class="right">
+<a class="selected" href="ProfileEdit.jsp" align="right"><i class="fa fa-pencil " aria-hidden="true"></i> EDIT PROFILE </a>
+<a href="Main.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a>
+</div>
+</nav>
+<div class="container">
+<h1> Edit Profile </h1>
+<hr>
+<label for="email"><b>Name</b></label>
+<input type="text" id="f_name" name="name" value="<%=rs.getString("fname")%>" placeholder="Enter name" required/> <br/>
+<label for="email"><b>Phone Number</b></label>
+<input type="text" id="pn" name="ph_no" value="<%=Long.parseLong(rs.getString("ph_no"))%>" placeholder="Enter phone number" required/> <br/>
+<label for="email"><b>Password</b></label>
+<input type=password id="pass" name="pass" value="<%=rs.getString("pass")%>" placeholder="Enter password" required/> <br/>
+<button type="submit" class="updatebtn" name="btnUpdate" value="Update">Update</button>
+</div>
+<%
+}
+try{
+if(request.getParameter("btnUpdate")!=null)
+{
+String name_up=request.getParameter("name");
+long phno_up=Long.parseLong(request.getParameter("ph_no"));
+String pass_up=request.getParameter("pass");
+String sql1="update vc_faculty set email_id=? ,fname=?, ph_no=? ,pass=? , sec_ques=? , sec_ans=? where email_id='"+email+"'";
+PreparedStatement ps=con.prepareStatement(sql1);
+ps.setString(1,e);
+ps.setString(2,name_up);
+ps.setLong(3,phno_up);
+ps.setString(4,pass_up);
+ps.setString(5,quest);
+ps.setString(6,answ);
+ps.executeUpdate();
+if(ps.executeUpdate()>=1)
+{
+response.sendRedirect("Faculty_profile.jsp");
+}
+}
+} catch (SQLException exx) {
+exx.printStackTrace(response.getWriter());
+}
+rs.close();
+st.close();
+con.close();
+} 
+catch (Exception e) {
+e.printStackTrace();
+}
+%>
+</form>
+</body>
+</html>
+
+
+student
+<%@ page import="java.sql.*" %>
+<%@page import="java.sql.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Admin | Registered Students</title>
+<link rel="stylesheet" href="reg_stud.css" type="text/css" >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<nav>
+<a href="AdminHome.jsp"><i class="fa fa-home" aria-hidden="true"></i>HOME</a>
+<a class="selected" href="Student.jsp"><i class="fa fa-users" aria-hidden="true"></i>STUDENTS</a>
+<a href="Faculty.jsp"><i class="fa fa-users" aria-hidden="true"></i>FACULTIES</a>
+<a href="Courses.jsp"><i class="fa fa-book" aria-hidden="true"></i>COURSES</a>
+<a href="Doubts.jsp"><i class="fa fa-question-circle" aria-hidden="true"></i>DOUBTS</a>
+<a href="Announcements.jsp"><i class="fa fa-bell" aria-hidden="true"></i>ANNOUNCEMENTS</a>
+<div class="right"><a href="Main.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a></div>
+</nav>
+<form method="post" name="form">
+<h2>Details of all Registered Students</h2>
+<table border="1">
+<tr>
+<th>Student ID</th>
+<th>Student Name</th>
+<th>Email-id</th>
+<th>Contact details</th>
+<th>Semester</th>
+<th>Branch</th>
+<th>Delete</th>
+<th>Verify</th>
+</tr>
+<%
+String pass1=(String)session.getAttribute("password1");
+try{
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement s= c.createStatement();
+String sql="select * from student";
+ResultSet rs= s.executeQuery(sql);
+while(rs.next())
+{
+%>
+<tr>
+<td><%=rs.getInt("sid") %></td>
+<td><%=rs.getString("sname") %></td>
+<td><%=rs.getString("email_id") %></td>
+<td><%=rs.getLong("ph_no") %></td>
+<td><%=rs.getInt("sem") %></td>
+<td><%=rs.getString("branch") %></td>
+<td><a href="update.jsp?sid=<%=rs.getInt("sid") %>"><button type="button" class="delete">Delete</button></a></td>
+<td><a href="verifyStudent.jsp?sid=<%=rs.getInt("sid") %>"><button type="button" class="delete">Verify</button></a></td>
+</tr>
+<%
+}
+%>
+<%
+}
+catch(Exception e){
+e.printStackTrace();
+}
+%>
+</table>
+</form>
+</body>
+</html>
+
+student_profile.css
+*{
+box-sizing:border-box;
+}
+body{
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+width:100%;
+height:100%;
+margin:0px; /*edit this line in every page */
+}
+nav {
+background-color:rgb(17, 124, 143) ;
+overflow: hidden;
+}
+nav a {
+text-decoration: none;
+padding: 20px;
+text-align: center;
+border:1;
+float: left;
+color: white;
+}
+
+nav a:hover{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+nav a.selected{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+h3{
+text-align:center;
+
+}
+h4{
+text-align:center;
+}
+.column1 img{
+margin-top:75px;
+margin-left:auto;
+margin-right:auto;
+display:block;
+vertical-align:top;
+}
+
+.cd{
+
+height:100px;
+width:1030px;
+background-color:white;
+color:black;
+font-weight:800;
+font-size:20px;
+margin:20px;
+padding:2px;
+border:1px solid;
+
+box-shadow: 0px 11px 35px 0px #888888 ;
+background-image: linear-gradient(45deg,#ffffff ,rgba(17, 124, 143,0.5));
+}
+.cd1{
+line-height: normal;
+height:500px;
+width:1030px;
+background-color:white;
+color:black;
+font-weight:800;
+font-size:20px;
+margin:20px;
+padding:2px;
+border:1px solid;
+
+box-shadow: 0px 11px 35px 0px #888888 ;
+background-image: linear-gradient(45deg,#ffffff ,rgba(17, 124, 143,0.5));
+}
+.right{
+text-align:right;
+float:right;
+}
+.container{
+margin-top: 30px;
+background-color:white;
+display:flex;
+flex-direction:column;
+justify-content:space-evenly;
+flex-wrap:wrap;
+align-content:space-evenly;
+width:100%;
+height:1200px;
+
+}
+h4{
+text-align:center;
+}
+footer {
+background-color:rgb(17, 124, 143);
+overflow: hidden;
+
+bottom:0;
+width:100%;
+}
+
+footer a {
+text-decoration: none;
+padding: 20px;
+text-align: center;
+float: left;
+color: white;
+}
+footer a:hover{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+footer a.active{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+
+student_register.css
+body {
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+background-image:url(student-img.jpg);
+background-repeat:no-repeat;
+background-size:cover;
+background-position: center center;
+text-align:center;
+width:50%;
+}
+form{
+margin-left: 50%;
+margin-right:50%;
+width: 100%;
+}
+* {
+box-sizing: border-box;
+}
+.container {
+padding: 16px;
+background-color: white;
+}
+/* Full-width input fields */
+input[type=text], input[type=password], input[type=number]{
+width: 100%;
+padding: 15px;
+margin: 5px 0 22px 0;
+display: inline-block;
+border: none;
+background: #f1f1f1;
+}
+textarea {
+width: 100%;
+height: 3px;
+padding: 15px;
+box-sizing: border-box;
+border: 2px solid #ccc;
+border-radius: 4px;
+background-color: #f1f1f1;
+resize: none;
+}
+select {
+width: 100%;
+padding: 15px;
+margin: 5px 0 22px 0;
+display:block;
+border: none;
+background: #f1f1f1;
+}
+input[type=text]:focus, input[type=password]:focus {
+background-color: #ddd;
+outline: none;
+}
+/* Overwrite default styles of hr */
+hr {
+border: 1px solid #f1f1f1;
+
+margin-bottom: 25px;
+}
+
+/* Set a style for the submit button */
+.registerbtn {
+background-color: #4CAF50;
+color: white;
+padding: 16px 20px;
+margin: 8px 0;
+border: none;
+cursor: pointer;
+width: 30%;
+opacity: 0.9;
+}
+
+.registerbtn:hover {
+opacity: 1;
+}
+
+/* Add a blue text color to links */
+a {
+color:white;
+}
+
+/* Set a grey background color and center the text of the "sign in" section */
+
+.signin {
+background-color: #f1f1f1;
+text-align: center;
+}
+
+studymaterial_student.css
+*{
+box-sizing:border-box;
+}
+body{
+background-color:white;
+width:100%;
+height:100%;
+margin:0px; /*edit this line in every page */
+}
+nav {
+background-color:rgb(17, 124, 143) ;
+overflow: hidden;
+}
+
+nav a {
+text-decoration: none;
+padding: 20px;
+text-align: center;
+border:1;
+float: left;
+color: white;
+}
+nav a:hover{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+nav a.selected{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+#nav{
+height:auto;
+width:auto;
+margin:0;
+border:none;
+padding:0;
+background-color:transparent;
+position:relative;
+bottom:10px;
+}
+#nav ul{
+margin:0;
+padding:0;
+list-style-type:none;
+}
+#nav ul li a{
+text-decoration:none;
+font-size:22px;
+background-color:#ff6347;
+display:block;
+margin:0px;
+width:250px;
+padding:5px 10px;
+color:white;
+text-align:center;
+}
+#nav ul li a:hover{
+background-color:white;
+color:black;
+font-size:30px;
+font-size:30px;
+}
+
+#nav ul li{
+display:inline;
+float:left;
+}
+.myBtn{
+background-color: orange;
+color: white;
+padding: 16px 20px;
+margin: 8px 0;
+border: none;
+cursor: pointer;
+width: 10%;
+opacity: 0.9;
+}
+.myBtn:active{
+opacity:1;
+color:orange;
+background-color: white;
+}
+.myBtn:hover {
+opacity: 1;
+}
+.right{
+text-align:right;
+float:right;
+}
+.previous {
+margin-right:25px;
+text-align:right;
+float:right;
+background-color: #f1f1f1;
+color: black;
+}
+footer {
+background-color:rgb(17, 124, 143);
+overflow: hidden;
+position:absolute;
+bottom:0;
+width:100%;
+}
+footer a {
+text-decoration: none;
+padding: 20px;
+text-align: center;
+float: left;
+color: white;
+
+}
+footer a:hover{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+footer a.active{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+table,tr,td{
+text-align:center;
+height:35px;
+font-size: 20px;
+}
+th{
+font-size:25px;
+background-color:rgb(17, 124, 143);
+}
+.table{
+margin:20px;
+}
+
+
+termsofuse
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Terms Of Use</title>
+        <style>
+        .container{
+width:30%;
+height:450px;
+border:solid;
+border-width:1px;
+border-color:navy;
+box-shadow:3px 2px 2px 3px #808080;
+        background-color: lightblue;
+  padding: 25px;
+}
+       
+</style>
+<link rel="stylesheet" href="reg_stud.css" type="text/css" >
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
+    </head>
+    <body>
+            <nav>
+        <a href="Main.jsp">BACK</a>
+    </nav>
+        <br>
+    <center>
+        <div class="container"><br>
+                    <h2>Hello User</h2>
+            By accessing or using this website, you agree to be bound by these terms of
+            use ("Terms of Use"). These Terms of Use affect
+            your legal rights and obligations. If you do not agree to be bound by all of these Terms of Use, do not access or
+            use the Service.
+            <br>
+            There may be times when we offer a special feature that has its own terms and conditions that apply in addition to
+            these Terms of Use. In those cases, the terms specific to the special feature control to the extent there is a conflict
+            with these Terms of Use.
+            <br>
+            ARBITRATION NOTICE: EXCEPT IF YOU OPT-OUT AND EXCEPT FOR CERTAIN TYPES OF DISPUTES DESCRIBED
+            IN THE ARBITRATION SECTION BELOW, YOU AGREE THAT DISPUTES BETWEEN YOU AND VIRTUAL CLASSROOM WILL BE
+            RESOLVED BY BINDING, INDIVIDUAL ARBITRATION AND YOU WAIVE YOUR RIGHT TO PARTICIPATE IN A
+            CLASS ACTION LAWSUIT OR CLASS-WIDE ARBITRATION.
+        </div>
+    </center>
+        <footer>
+        <a href="#">Terms of Use</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">&copy; 2021</a>
+        </footer>
+    </body>
+</html>
+
+
+vc_news
+<%@page import="java.sql.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Virtual Classroom | Announcements</title>
+<link rel="stylesheet" href="reg_stud.css" type="text/css" >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<nav>
+<a href="VC_Student_profile.jsp"><i class="fa fa-home " aria-hidden="true"></i> HOME</a>
+<a href="VC_StudyMaterial_student.jsp"><i class="fa fa-file-text " aria-hidden="true"></i> STUDY MATERIAL</a>
+<a href="VC_doubts.jsp"><i class="fa fa-question-circle " aria-hidden="true"></i> DOUBTS</a>
+<a class="selected" href="VC_News.jsp" ><i class="fa fa-bell " aria-hidden="true"></i>ANNOUNCEMENTS</a>
+<div class="right">
+<a href="VC_Profile_edit.jsp" ><i class="fa fa-pencil " aria-hidden="true"></i> EDIT PROFILE </a>
+<a href="VC_Student_logout.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a>
+</div>
+</nav>
+<h2> Announcements </h2>
+<div id="table1">
+<center>
+<table width="75%">
+<tr>
+<th>Notice ID</th>
+<th>Notice</th>
+<th>Date of announcement</th>
+</tr>
+<%
+try{
+String email=(String)session.getAttribute("email1");
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement s= c.createStatement();
+String sql="select * from announcements";
+ResultSet rs= s.executeQuery(sql);
+while(rs.next())
+{
+%>
+<tr>
+<td><%=rs.getString("nid") %></td>
+<td><%=rs.getString("notice") %></td>
+<td><%=rs.getString("date") %></td>
+</tr>
+<%
+}
+rs.close();
+s.close();
+c.close();
+}
+catch(Exception e) {
+e.printStackTrace();
+}
+%>
+</table>
+<div class="imag"></div>
+</center>
+</div>
+</body>
+</html>
+
+
+vc_profile_edit
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Student | Edit</title>
+<link rel="stylesheet" href="edit.css" type="text/css" >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script>
+function validate()
+{
+var pn=document.getElementById('pn').value;
+var password=document.getElementById('pass').value;
+var name=document.getElementById('f_name').value;
+var urREGX=/[A-Za-z]+\s/;
+var nameResult = urREGX.test(name);
+var pn=document.getElementById('pn').value;
+var pnRGEX=/^((?!(0))[0-9]{10})$/;
+var pnResult= pnRGEX.test(pn);
+if(pnResult == false)
+{
+alert('Enter valid phone number ');
+return false;
+}
+if(nameResult == false)
+{
+document.getElementById('f_name').style.backgroundColor='#FFFF99';
+alert('invalid Name');
+return false;
+}
+if(pn.length!=10)
+{
+alert('Phone number must be 10 digit long');
+return false;
+}
+if(password.length <8)
+{
+document.getElementById('pass').style.backgroundColor='#FFFF99';
+alert('Password must be more or 8 charachters long ');
+return false;
+}
+return true;
+}
+</script>
+</head>
+<body>
+<%
+String email=(String)session.getAttribute("email1");
+try{
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+java.sql.Connection con =DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+String e="",quest="",answ="";
+String sql="Select * from student where email_id='"+email+"'";
+Statement st= con.createStatement();
+ResultSet rs=st.executeQuery(sql);
+rs=st.executeQuery(sql);
+if(rs.next())
+{
+e=rs.getString("email_id");
+quest=rs.getString("sec_ques");
+answ=rs.getString("sec_ans");
+%>
+<form method="Post" onchange="return validate()">
+<nav>
+<a href="VC_Student_profile.jsp"><i class="fa fa-home" aria-hidden="true"></i> HOME</a>
+<a href="VC_StudyMaterial_student.jsp"><i class="fa fa-file-text " aria-hidden="true"></i> STUDY MATERIAL</a>
+<a href="VC_doubts.jsp"><i class="fa fa-question-circle" aria-hidden="true"></i> DOUBTS</a>
+<a href="VC_News.jsp" ><i class="fa fa-bell " aria-hidden="true"></i>ANNOUNCEMENTS</a>
+<div class="right">
+<a class="selected" href="VC_Profile_edit.jsp" ><i class="fa fa-pencil " aria-hidden="true"></i> EDIT PROFILE </a>
+<a href="VC_Student_logout.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a>
+</div>
+</nav>
+<div class="container">
+<h1> Edit Profile <i class="fa fa-pencil" aria-hidden="true"></i></h1>
+<hr>
+<label for="email"><b>Name</b></label>
+<input type="text" id="f_name" name="name" value="<%=rs.getString("sname")%>" placeholder="Enter name" required/> <br/>
+<label for="email"><b>Password</b></label>
+<input type=password id="pass" name="pass" value="<%=rs.getString("pass")%>" placeholder="Enter password" required/> <br/>
+<label for="email"><b>Phone Number</b></label>
+<input type="text" id="pn" name="ph_no" value="<%=rs.getLong("ph_no")%>" placeholder="Enter phone number" required/> <br/>
+<label for="email"><b>Select course</b></label>
+<select name="course">
+<option selected value="<%=rs.getString("branch")%>" >
+<%=rs.getString("branch")%></option>
+<option value="Information Technology"> B.Tech Information Technology </option>
+<option value="Computer Science"> B.Tech Computer Science </option>
+<option value="Biotechnology"> B.Tech Biotechnology </option>
+<option value="Chemical Engineering"> B.Tech Chemical Engineering </option>
+</select>
+<label for="email"><b>Select Semester</b></label>
+<select name="sem">
+<option selected value="<%=rs.getInt("sem")%>" > <%=rs.getInt("sem")%> </option>
+<option value="1"> 1 </option>
+<option value="2"> 2</option>
+<option value="3"> 3 </option>
+<option value="4"> 4 </option>
+<option value="5"> 5 </option>
+<option value="6"> 6 </option>
+<option value="7"> 7 </option>
+<option value="8"> 8 </option>
+</select>
+<button type="submit" class="updatebtn" name="btnUpdate" value="Update">Update</button>
+</div>
+<%
+}
+try{
+if(request.getParameter("btnUpdate")!=null)
+{
+String name_up=request.getParameter("name");
+String pass_up=request.getParameter("pass");
+long phno_up=Long.parseLong(request.getParameter("ph_no"));
+String course_up=request.getParameter("course");
+int sem_up=Integer.parseInt(request.getParameter("sem"));
+String question_up=request.getParameter("question");
+String answer_up=request.getParameter("answer");
+String sql1="update student set email_id=? , pass=? ,sname=?, ph_no=? , sem=? ,branch=? , sec_ques=? , sec_ans=? where email_id='"+email+"'";
+PreparedStatement ps=con.prepareStatement(sql1);
+ps.setString(1,e);
+ps.setString(2,pass_up);
+ps.setString(3,name_up);
+ps.setLong(4,phno_up);
+ps.setInt(5,sem_up);
+ps.setString(6,course_up);
+ps.setString(7,quest);
+ps.setString(8,answ);
+ps.executeUpdate();
+if(ps.executeUpdate()>=1)
+{
+response.sendRedirect("VC_Student_profile.jsp");
+}
+}
+} catch (SQLException exx) {
+exx.printStackTrace();
+}
+rs.close();
+st.close();
+con.close();
+} catch (Exception e) {
+e.printStackTrace();
+}
+%>
+</form>
+</body>
+</html>
+
+
+vc_studentregistration
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Student | Registration</title>
+<link rel="stylesheet" href="Student_register.css" type="text/css" >
+<script>
+function validate(){
+var name=document.getElementById('f_name').value;
+var email_id=document.getElementById('email').value;
+var pn=document.getElementById('pn').value;
+var password=document.getElementById('pass').value;
+var c_password=document.getElementById('c_pass').value;
+var emailRGEX=/^\w+\.?\w+@[a-zA-Z_]+\.[a-zA-Z]{2,5}$/i ;
+var urREGX=/[A-Za-z]+\s/;
+var pnRGEX=/^((?!(0))[0-9]{10})$/;
+var emailResult = emailRGEX.test(email_id);
+var nameResult = urREGX.test(name);
+var pnResult= pnRGEX.test(pn);
+if(pnResult == false)
+{
+alert('Enter valid phone number ');
+return false;
+}
+if(emailResult == false)
+{
+document.getElementById('email').style.backgroundColor='#FFFF99';
+alert('invalid email');
+return false;
+}
+if(nameResult == false)
+{
+document.getElementById('f_name').style.backgroundColor='#FFFF99';
+alert('invalid Name');
+return false;
+}
+if(pn.length!=10)
+{
+alert('Phone number must be 10 digit long');
+return false;
+}
+if(password.length <8)
+{
+document.getElementById('pass').style.backgroundColor='#FFFF99';
+alert('Password must be more or 8 charachters long ');
+return false;
+}
+if(password !== c_password)
+{
+alert('password does not match ');
+return false;
+}
+return true;
+}
+</script>
+</head>
+<body>
+<center>
+<form method="Post" onsubmit="return validate()">
+<center>
+<div class="container">
+<h1>Register</h1>
+<p>Please fill in this form to create an account.</p>
+<hr>
+<label for="email"><b>Name</b></label>
+<input type="text" id="f_name" name="name" placeholder="Enter name" required/> <br/>
+<label for="email"><b>Email</b></label>
+<input type="text" id="email" name="e-mail" placeholder="Enter email" required/> <br/>
+<label for="email"><b>Password</b></label>
+<input type=password id="pass" name="pass" placeholder="Enter password" required/> <br/>
+<label for="email"><b>Re-enter Password</b></label>
+<input type=password id="c_pass" name="pass" placeholder="Enter password" required/> <br/>
+<label for="email"><b>Phone Number</b></label>
+<input type="number" id="pn" name="ph_no" placeholder="Enter Phone number" required/> <br/>
+<label for="email"><b>Select course</b></label>
+<select name="course">
+<option selected hidden </option>
+<option value="Information Technology"> B.Tech Information Technology </option>
+<option value="Computer Science"> B.Tech Computer Science </option>
+<option value="Biotechnology"> B.Tech Biotechnology</option>
+<option value="Chemical Engineering"> B.Tech Chemical Engineering</option>
+</select>
+<label for="email"><b>Select Semester</b></label>
+<select name="semester">
+<option selected hidden </option>
+<option value="1"> 1 </option>
+<option value="2"> 2</option>
+<option value="3"> 3 </option>
+<option value="4"> 4 </option>
+<option value="5"> 5 </option>
+<option value="6"> 6 </option>
+<option value="7"> 7 </option>
+<option value="8"> 8 </option>
+</select>
+<label for="email"><b>Enter a security question</b></label>
+<input type="text" name="question" placeholder="Enter question" required/> <br/>
+<label for="email"><b>Enter answer to the security question</b></label>
+<input type="text" name="answer" placeholder="Enter answer" required/> <br/>
+<hr>
+<p>By creating an account you agree to our Terms & Privacy</a>.</p>
+<button type="submit" class="registerbtn" name="btnInsert" value="Insert">Register</button>
+</div>
+<div class.="container signin">
+<p>Already have an account? <a href="VC_Student_login.jsp">Login</a>.</p>
+</div>
+</center>
+
+<%
+
+try{
+if(request.getParameter("btnInsert")!=null)
+{
+String n=request.getParameter("name");
+String p=request.getParameter("pass");
+String e=request.getParameter("e-mail");
+long pn=Long.parseLong(request.getParameter("ph_no"));
+String cou=request.getParameter("course");
+int sem=Integer.parseInt(request.getParameter("semester"));
+String que=request.getParameter("question");
+String ans=request.getParameter("answer");
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection con=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement st = con.createStatement();
+ResultSet rs=st.executeQuery("Select * from student where email_id='"+e+"'");
+int count =0;
+while(rs.next())
+{
+count++;
+}
+if(count>0)
+{
+out.println("<script>alert('Email id already exists try with another email id or try sigining in')</script>");
+}
+else
+{
+int x=st.executeUpdate("insert into student(email_id,sname,sem,branch,ph_no,pass,sec_ques,sec_ans) values('"+e+"','"+n+"',"+sem+",'"+cou+"',"+pn+",'"+p+"','"+que+"','"+ans+"')");
+if(x>0)
+if(e.isEmpty() || n.isEmpty() || p.isEmpty() || que.isEmpty() || ans.isEmpty() || cou.isEmpty() || sem==0)
+{
+response.sendRedirect("VC_Student_Registration.jsp");
+}
+else
+{
+out.print("<script>alert('Please wait for admin verification')</script>");
+}
+}
+st.close();
+con.close();
+rs.close();
+}
+} catch (SQLException exx) {
+exx.printStackTrace();
+out.println("something wrong");
+}
+%>
+</form>
+</center>
+</body>
+</html>
+
+vc_student_login
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.*"%>
+<%@page import="java.util.*"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Student Login</title>
+<link rel="stylesheet" href="login_student.css" type="text/css" >
+</head>
+<body>
+<nav>
+<a class="selected" href="VC_Student_login.jsp"> Student Login </a>
+<a href="#" style="text-align:right;
+float:right;">Contact Us-<span style="color: cyan">9987643456</span> </a>
+</nav>
+<main style="background-image: url(student-img_1.jpg)">
+<section>
+<h3>Student Login</h3>
+<center><h4>Enter valid credentials</h4></center>
+<center>
+<form method="post">
+Email&nbsp; &nbsp; &nbsp; &nbsp;
+<input type="text" name="user_email" placeholder="enter username" align="middle" required></br> </br>
+Password&nbsp;
+<input type="password" name="password" placeholder="enter password" align="middle" required></br></br>
+<button class="button1" name="log_in" value="logged_in">Login</button></br> </br>
+<a href="forgot_password.jsp">Forgot Password?</a></br></br>
+If not Registered then <a href="VC_Student_Registration.jsp">Register</a> </br>
+<%
+try{
+if(request.getParameter("log_in")!=null)
+{
+String username=request.getParameter("user_email");
+String password=request.getParameter("password");
+session.setAttribute("email1",username);
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+java.sql.Connection con =DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement st= con.createStatement();
+ResultSet rs=st.executeQuery("select * from student where email_id='"+username+"' and pass='"+password+"'");
+try{
+if(rs.next())
+{
+if(rs.getString("pass").equalsIgnoreCase(password) && rs.getString("email_id").equalsIgnoreCase(username) && rs.getInt("status")==1)
+{
+response.sendRedirect("VC_Student_profile.jsp");
+}
+else if(rs.getInt("status")!=1)
+{
+out.println("<script> alert('You cannot login until you are verified by admin')</script>");
+}
+}
+else
+{
+out.print("<span>Invalid password or username</span>");
+}
+}catch (Exception e) {
+e.printStackTrace();
+}
+st.close();
+con.close();
+rs.close();
+}
+}catch (Exception e) {
+e.printStackTrace();
+}
+%>
+</br>
+</br>
+</form>
+</center>
+</section>
+</main>
+<footer>
+<a href="TermsOfUse.jsp">Terms of Use</a>
+<a href="PrivacyPolicy.jsp">Privacy Policy</a>
+<a href="#">&copy; 2021</a>
+</footer>
+</body>
+</html>
+
+vc_student_logout
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<!DOCTYPE html>
+<%
+session.invalidate();
+response.sendRedirect("VC_Student_login.jsp");
+%>
+
+vc_student_profile
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.*"%>
+<%@page import="java.util.*"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Student | Profile </title>
+<link href="Student_profile.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<form method="Post">
+<nav>
+<a class="selected" href="VC_Student_profile.jsp"><i class="fa fa-home " aria-hidden="true"></i>HOME</a>
+<a href="VC_StudyMaterial_student.jsp"><i class="fa fa-file-text " aria-hidden="true"></i> STUDY MATERIAL</a>
+<a href="VC_doubts.jsp"><i class="fa fa-question-circle " aria-hidden="true"></i> DOUBTS</a>
+<a href="VC_News.jsp" ><i class="fa fa-bell " aria-hidden="true"></i> ANNOUNCEMENTS</a>
+<div class="right">
+<a href="VC_Profile_edit.jsp" ><i class="fa fa-pencil " aria-hidden="true"></i> EDIT PROFILE </a>
+<a href="VC_Student_logout.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a>
+</div>
+</nav>
+<table height=100% width=100%>
+<tr>
+<td width=20% valign="top">
+<div class="column1">
+<img src="profile_2.png" height=120px width=130px>
+<h3> Logged in as: </h3>
+<%
+String email=(String)session.getAttribute("email1");
+out.println("<h3>"+email+"</h3>");
+%>
+</div>
+</td>
+<td height=100% width=100%>
+<div class=container>
+<div class="cd">
+<%
+try{
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+java.sql.Connection con =DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+String sql="Select * from student where email_id='"+email+"'";
+Statement st= con.createStatement();
+ResultSet rs=st.executeQuery(sql);
+rs=st.executeQuery(sql);
+if(rs.next())
+{
+out.println("<h4>"+"Name: "+rs.getString("sname")+"</h4>");
+%>
+</div>
+<div class="cd">
+<%
+out.println("<h4>"+"Branch: "+rs.getString("branch")+"</h4>");
+%>
+</div>
+<div class="cd">
+<%
+out.println("<h4>"+"Semester: "+rs.getInt("sem")+"</h4>");
+st.close();
+con.close();
+rs.close();
+}
+}catch(Exception e ){
+out.println("error in semester");
+System.out.println("error in semester");
+}
+%>
+</div>
+<div class="cd1">
+<%
+try{
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+java.sql.Connection con=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+String sql="Select sname from student where email_id='"+email+"'";
+Statement st= con.createStatement();
+ResultSet rs=st.executeQuery(sql);
+rs=st.executeQuery("Select sub_ject.sub_name from (student join sub_ject on student.sem=sub_ject.sem and student.branch=sub_ject.branch) where student.email_id='"+email+"' order by sub_ject.SUB_NAME");
+int count=0;
+while(rs.next())
+{
+count++;
+%>
+<center>
+<table>
+<tr>
+<td>
+<%
+out.print("<h5>"+"Subject "+count+":</h5>");
+%>
+</td>
+<td>
+<%
+out.print("<h5>"+rs.getString("sub_name")+"</h5>");
+%>
+</td>
+</h4>
+</tr>
+</table>
+</center>
+<%
+}
+st.close();
+con.close();
+rs.close();
+}catch(Exception e ){
+out.println("error in subject");
+System.out.println("error in subject");
+}
+%>
+</div>
+<div class="cd">
+<%
+try{
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+java.sql.Connection con =DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+String sql="Select sname from student where email_id='"+email+"'";
+Statement st= con.createStatement();
+ResultSet rs=st.executeQuery(sql);
+rs=st.executeQuery("Select ph_no from student where email_id='"+email+"'");
+rs.next();
+out.println("<h4>"+"Phone Number: "+rs.getString("ph_no")+"</h4>");
+st.close();
+con.close();
+rs.close();
+}catch(Exception e ){
+out.println("error in phone number");
+System.out.println("error in phone number");
+}
+%>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</form>
+</body>
+</html>
+
+vc_studymaterial_student
+<%@page import="java.io.File"%>
+<%@page import="java.io.OutputStream"%>
+<%@page import="java.io.IOException"%>
+<%@page import="java.io.FileInputStream"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.*"%>
+<%@page import="java.util.*"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!doctype html>
+<html>
+<head>
+<title> Student | Study Material </title>
+<link href="reg_stud.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script language="javascript">
+function editRecord(id){
+var f=document.form;
+f.method="post";
+f.action='viewstudymaterial.jsp?sub_id='+id;
+f.submit();
+}
+</script>
+</head>
+<body>
+<form method="Post">
+<nav>
+<a href="VC_Student_profile.jsp"><i class="fa fa-home" aria-hidden="true"></i>HOME</a>
+<a href="VC_StudyMaterial_student.jsp" class="selected" ><i class="fa fa-file-text " aria-hidden="true"></i>STUDY MATERIAL</a>
+<a href="VC_doubts.jsp"><i class="fa fa-question-circle " aria-hidden="true"></i>DOUBTS</a>
+<a href="VC_News.jsp"><i class="fa fa-bell " aria-hidden="true"></i>ANNOUNCEMENTS</a>
+<div class="right"><a href="VC_Profile_edit.jsp" align="right"><i class="fa fa-pencil " aria-hidden="true"></i>EDIT PROFILE </a>
+<a href="VC_Student_logout.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a></div>
+</nav>
+<div id="nav">
+<form method="post" name="form">
+<h2>Details of all Course</h2>
+<table border="1">
+<tr>
+<th>Subject ID</th>
+<th>Subject Name</th>
+<th>View files</th>
+</tr>
+<%
+String email=(String)session.getAttribute("email1");
+try{
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+java.sql.Connection con =DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+String sql="Select * from student where email_id='"+email+"'";
+Statement st= con.createStatement();
+ResultSet rs=st.executeQuery(sql);
+rs=st.executeQuery(sql);
+rs.next();
+String bra_nch=rs.getString("branch");
+String semester=rs.getString("sem");
+rs=st.executeQuery("Select sub_ject.sub_id,sub_ject.sub_name from (student join sub_ject on student.sem=sub_ject.sem and student.branch=sub_ject.branch) where student.email_id='"+email+"' order by sub_ject.sub_id");
+int cou=0;
+String arr[]=new String[8];
+while(rs.next())
+{
+cou++;
+arr[cou]=rs.getString("sub_name");
+%>
+<tr>
+<td><%=rs.getString("sub_id") %></td>
+<td><%=rs.getString("sub_name") %></td>
+<td><a href="viewstudymaterial.jsp?sub_id=<%=rs.getString("sub_id") %>"><button type="button" class="delete">View</button></a></td>
+</tr>
+<%
+}
+rs.close();
+st.close();
+con.close();
+}
+catch(Exception e) {
+e.printStackTrace();
+}
+%>
+</table>
+</div>
+</form>
+</body>
+</html>
+
+vc_doubts
+<%@page import="java.io.File"%>
+<%@page import="java.io.OutputStream"%>
+<%@page import="java.io.IOException"%>
+<%@page import="java.io.FileInputStream"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.*"%>
+<%@page import="java.util.*"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!DOCTYPE html>
+<html>
+<head>
+<title> Student | Study Material </title>
+<link href="reg_stud.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script language="javascript">
+function editRecord(id){
+var f=document.form;
+f.method="post";
+f.action='viewstudymaterial.jsp?sub_id='+id;
+f.submit();
+}
+</script>
+</head>
+<body>
+<form method="Post">
+<nav>
+<a href="VC_Student_profile.jsp"><i class="fa fa-home " aria-hidden="true"></i> HOME</a>
+<a href="VC_StudyMaterial_student.jsp"><i class="fa fa-file-text " aria-hidden="true"></i> STUDY MATERIAL</a>
+<a class="selected" href="VC_doubts.jsp"><i class="fa fa-question-circle " aria-hidden="true"></i>DOUBTS</a>
+<a href="VC_News.jsp" ><i class="fa fa-bell " aria-hidden="true"></i>ANNOUNCEMENTS</a>
+<div class="right">
+<a href="VC_Profile_edit.jsp" ><i class="fa fa-pencil " aria-hidden="true"></i> EDIT PROFILE </a>
+<a href="VC_Student_logout.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a>
+</div>
+</nav>
+<div id="nav">
+<form method="post" name="form">
+<h2>Details of all Course</h2>
+<table border="1">
+<tr>
+<th>Subject ID</th>
+<th>Subject Name</th>
+<th>View Doubts</th>
+</tr>
+<%
+String email=(String)session.getAttribute("email1");
+session.setAttribute("email_1",email);
+try{
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+java.sql.Connection con =DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+try{
+String sql="Select * from student where email_id='"+email+"' ";
+Statement st= con.createStatement();
+ResultSet rs=st.executeQuery(sql);
+rs=st.executeQuery(sql);
+rs.next();
+rs=st.executeQuery("Select sub_ject.sub_id,sub_ject.sub_name from (student join sub_ject on student.sem=sub_ject.sem and student.branch=sub_ject.branch) where student.email_id='"+email+"' order by sub_ject.sub_id");
+int cou=0;
+String arr[]=new String[8];
+while(rs.next())
+{
+cou++;
+arr[cou]=rs.getString("sub_name");
+%>
+<tr>
+<td><%=rs.getString("sub_id") %></td>
+<td><%=rs.getString("sub_name") %></td>
+<td><a href="doubtsquestion.jsp?sub_id=<%=rs.getString("sub_id") %>"><button type="button"
+class="delete">View</button></a></td>
+</tr>
+<%
+}
+rs.close();
+st.close();
+con.close();
+}catch(Exception ep) {
+out.println("error11");
+}
+}
+catch(Exception e) {
+e.printStackTrace();
+out.println("error");
+}
+%>
+</table>
+</div>
+</form>
+</body>
+</html>
+
+view.jsp
+<%@page language="java"%>
+<%@page import="java.sql.*"%>
+<html>
+<head>
+<title>Faculty | View Study Material</title>
+<link rel="stylesheet" href="reg_stud.css" type="text/css" >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<nav>
+<a href="Faculty_profile.jsp"><i class="fa fa-home" aria-hidden="true"></i>HOME</a>
+<a href="ViewStudent.jsp"><i class="fa fa-users" aria-hidden="true"></i>STUDENTS</a>
+<a href="CStudyMaterial.jsp"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>BACK</a>
+<a href="FacultyDoubts.jsp"><i class="fa fa-question-circle" aria-hidden="true"></i>DOUBTS</a>
+<a href="FacultyNews.jsp"><i class="fa fa-bell" aria-hidden="true"></i>ANNOUNCEMENTS</a>
+<div class="right">
+<a href="ProfileEdit.jsp" align="right"><i class="fa fa-pencil" aria-hidden="true"></i>EDIT PROFILE </a>
+<a href="Main.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a>
+</div>
+</nav>
+<form method="post">
+<table border="1">
+<tr>
+<th>Document Id</th>
+<th>Document name</th>
+<th>Document path</th>
+<th>Delete Study Material</th>
+</tr>
+<%
+try {
+int no=Integer.parseInt(request.getParameter("sub_id"));
+int sumcount=0;
+String query = "select * from document where sub_id="+no+"";
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement st = c.createStatement();
+ResultSet rs = st.executeQuery(query);
+while(rs.next())
+{
+%>
+<tr>
+<tr>
+<td><input type="text" name="doc_id" value="<%=rs.getInt("doc_id")%>"></td>
+<td><input type="text" name="dname" value="<%=rs.getString("doc_name")%>"></td>
+<td><input type="text" name="dpath" value="<%=rs.getString("doc_path")%>"></td>
+<td><a href="DeleteStudyMaterial.jsp?doc_id=<%=rs.getInt("doc_id") %>"><button type="button" class="delete">Delete</button></a></td>
+</tr>
+<%
+}
+}
+catch(Exception e){}
+%>
+</table>
+</form>
+</body>
+</html>
+
+viewdoubts.jsp
+<%@page language="java"%>
+<%@page import="java.sql.*"%>
+<html>
+<head>
+<title>Admin | View Doubts</title>
+<link rel="stylesheet" href="reg_stud.css" type="text/css" >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<nav>
+<a href="AdminHome.jsp"><i class="fa fa-home" aria-hidden="true"></i>HOME</a>
+<a href="Doubts.jsp"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>BACK</a>
+<div style="text-align:right;float:right;"><a href="Main.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a></div>
+</nav>
+<form method="post">
+<table border="1">
+<tr>
+<th>Question</th>
+<th>Asked by</th>
+<th>Answer</th>
+<th>Answered by</th>
+<th>Delete</th>
+</tr>
+<%
+try {
+int no=Integer.parseInt(request.getParameter("sub_id"));
+int sumcount=0;
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement s= c.createStatement();
+String query = "select * from doubts where sub_id="+no+"";
+ResultSet rs = s.executeQuery(query);
+while(rs.next())
+{
+%>
+<tr>
+<tr>
+<td><input type="text" name="ques" value="<%=rs.getString("ques")%>"></td>
+<td><input type="text" name="asked_by" value="<%=rs.getString("asked_by")%>"></td>
+<td><input type="text" name="ans" value="<%=rs.getString("ans")%>"></td>
+<td><input type="text" name="ans_by" value="<%=rs.getString("answered_by")%>"></td>
+<td><a href="DeleteDoubts.jsp?did=<%=rs.getInt("did") %>"><button type="button" class="delete">Delete</button></a></td>
+</tr>
+<%
+}
+}
+catch(Exception e){}
+%>
+</table>
+</form>
+</body>
+</html>
+
+
+viewstudent
+<%@ page import="java.sql.*" %>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Faculty | Students</title>
+<link rel="stylesheet" href="reg_stud.css" type="text/css" >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<nav>
+<a href="Faculty_profile.jsp"><i class="fa fa-home" aria-hidden="true"></i>HOME</a>
+<a class="selected" href="ViewStudent.jsp"><i class="fa fa-users" aria-hidden="true"></i>STUDENTS</a>
+<a href="CStudyMaterial.jsp"><i class="fa fa-file-text" aria-hidden="true"></i>STUDY MATERIAL</a>
+<a href="FacultyDoubts.jsp"><i class="fa fa-question-circle" aria-hidden="true"></i>DOUBTS</a>
+<a href="FacultyNews.jsp"><i class="fa fa-bell" aria-hidden="true"></i>ANNOUNCEMENTS</a>
+<div class="right">
+<a href="ProfileEdit.jsp" align="right"><i class="fa fa-pencil " aria-hidden="true"></i> EDIT PROFILE </a>
+<a href="Main.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a>
+</div>
+</nav>
+<form method="post" name="form">
+<h2>Details of all Registered Students</h2>
+<table border="1">
+<tr>
+<th>Student ID</th>
+<th>Student Name</th>
+<th>Email-id</th>
+<th>Contact details</th>
+<th>Semester</th>
+<th>Branch</th>
+</tr>
+<%
+String email=(String)session.getAttribute("email_id");
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement s= c.createStatement();
+String sql="Select distinct student.sid,student.sname,student.email_id,student.ph_no,student.sem,student.branch from (student join sub_ject on (student.sem=sub_ject.sem and student.branch=sub_ject.branch) join vc_faculty on sub_ject.fname=vc_faculty.fname) where vc_faculty.email_id='"+email+"' order by student.branch";
+try{
+ResultSet rs= s.executeQuery(sql);
+while(rs.next())
+{
+%>
+<tr>
+<td><%=rs.getInt("sid") %></td>
+<td><%=rs.getString("sname") %></td>
+<td><%=rs.getString("email_id") %></td>
+<td><%=rs.getLong("ph_no") %></td>
+<td><%=rs.getInt("sem") %></td>
+<td><%=rs.getString("branch") %></td>
+</tr>
+<%
+}
+%>
+<%
+}
+catch(Exception e){
+e.printStackTrace();
+out.println("wwwwwww");
+}
+%>
+</table>
+</form>
+</body>
+</html>
+
+add_answer.jsp
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<title>Add answer</title>
+<style>
+
+*
+{
+box-sizing: border-box;
+}
+
+body {
+margin: 0px;
+width:100%;
+height:105%;
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+nav {
+background-color:rgb(17, 124, 143) ;
+overflow: hidden;
+}
+nav a {
+text-decoration: none;
+padding: 20px;
+text-align: center;
+border:1;
+float: left;
+color: white;
+}
+
+nav a:hover{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+nav a.selected{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+
+.right{
+text-align:right;
+float:right;
+}
+footer {
+background-color:rgb(17, 124, 143);
+overflow: hidden;
+position:absolute;
+bottom:0;
+width:100%;
+}
+
+footer a {
+text-decoration: none;
+padding: 20px;
+text-align: center;
+
+float: left;
+color: white;
+}
+footer a:hover{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+footer a.active{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+
+.container {
+width:95%;
+padding: 16px;
+background-color: lightblue;
+}
+input[type=text]{
+width: 95%;
+padding: 10px;
+
+display: inline-block;
+border: none;
+background: #f1f1f1;
+}
+
+.insertbtn {
+background-color: #4CAF50;
+font-weight:bold;
+color: black;
+padding: 16px 20px;
+margin: 3px 0;
+border: none;
+cursor: pointer;
+width: 15%;
+opacity: 0.9;
+table{
+border-collapse: separate;
+border-spacing: 0 1em;
+}
+}
+</style>
+</head>
+<body>
+<form method="post">
+<nav>
+<a href="VC_Student_profile.jsp"><i class="fa fa-home " aria-hidden="true"></i> HOME</a>
+<a href="VC_StudyMaterial_student.jsp"><i class="fa fa-file-text " aria-hidden="true"></i> STUDY MATERIAL</a>
+<a class="selected" href="VC_doubts.jsp"><i class="fa fa-comments " aria-hidden="true"></i>DOUBTS</a>
+<a href="VC_News.jsp" ><i class="fa fa-bullhorn " aria-hidden="true"></i> NEWS</a>
+<div class="right">
+<a href="VC_Profile_edit.jsp" ><i class="fa fa-pencil " aria-hidden="true"></i> EDIT PROFILE </a>
+<a href="VC_Student_logout.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a>
+</div>
+</nav>
+<br/><br/>
+<%
+String question=request.getParameter("ques");
+%>
+<center> <div class="container">
+<h4>Post an answer</h4>
+<table width=100%>
+<tr>
+<td >
+<label for="email"><b>Question</b></label>
+</td>
+<td>
+<% out.println(question);%>
+</td>
+</tr>
+<tr>
+<td>
+<label for="email"><b>Answered by</b></label>
+</td>
+<td>
+<input type="text" name="add_name" placeholder="Enter name" required/> <br/>
+</td>
+</tr>
+<tr>
+<td>
+<label for="email"><b>Answer</b></label>
+</td>
+<br/>
+<td>
+<textarea rows="4" cols="155" name="add_ans" width="100%"></textarea>
+</td>
+</tr>
+</table>
+<center><button type="submit" class="insertbtn" name="btnInsert" value="Insert">Done</button></center>
+</div>
+</center>
+<%
+if(request.getParameter("btnInsert")!=null)
+{
+String nm=request.getParameter("add_name");
+String ans=request.getParameter("add_ans");
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+java.sql.Connection con =DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+int subject_id = (int)session.getAttribute("sub_id");
+Statement st= con.createStatement();
+ResultSet rs1=st.executeQuery("Select * from document where sub_id="+subject_id+" ");
+int x=st.executeUpdate("update doubt set ans='"+ans+"' , answered_by='"+nm+"' where ques='"+question+"' ");
+if(x>0)
+{
+response.sendRedirect("doubtsquestion.jsp?sub_id="+subject_id );
+}
+}
+%>
+</form>
+</body>
+</html>
+
+add_answer_faculty.jsp
+<%@page import="java.sql.Connection"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Faculty | Add answer</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<title>Add answer</title>
+<style>
+*
+{
+box-sizing: border-box;
+}
+
+body {
+margin: 0px;
+width:100%;
+height:105%;
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+nav {
+background-color:rgb(17, 124, 143) ;
+overflow: hidden;
+}
+
+nav a {
+text-decoration: none;
+padding: 20px;
+text-align: center;
+border:1;
+float: left;
+color: white;
+}
+
+nav a:hover{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+
+nav a.selected{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+
+.right{
+text-align:right;
+float:right;
+}
+
+footer {
+background-color:rgb(17, 124, 143);
+overflow: hidden;
+position:absolute;
+bottom:0;
+width:100%;
+}
+
+footer a {
+text-decoration: none;
+padding: 20px;
+text-align: center;
+float: left;
+color: white;
+}
+
+footer a:hover{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+
+footer a.active{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+
+.container {
+width:95%;
+padding: 16px;
+background-color: lightblue;
+}
+
+input[type=text]{
+width: 95%;
+padding: 10px;
+display: inline-block;
+border: none;
+background: #f1f1f1;
+}
+
+.insertbtn {
+background-color: #4CAF50;
+font-weight:bold;
+color: black;
+padding: 16px 20px;
+margin: 3px 0;
+border: none;
+cursor: pointer;
+width: 15%;
+opacity: 0.9;
+}
+
+table{
+border-collapse: separate;
+border-spacing: 0 1em;
+}
+
+</style>
+</head>
+<body>
+<form method="post">
+<nav>
+<a href="Faculty_profile.jsp"><i class="fa fa-home" aria-hidden="true"></i>HOME</a>
+<a href="ViewStudent.jsp"><i class="fa fa-users" aria-hidden="true"></i>STUDENTS</a>
+<a href="CStudyMaterial.jsp"><i class="fa fa-file-text" aria-hidden="true"></i>STUDY MATERIAL</a>
+<a href="FacultyDoubts.jsp"><i class="fa fa-comments " aria-hidden="true"></i>DOUBTS</a>
+<a href="FacultyNews.jsp"><i class="fa fa-bell" aria-hidden="true"></i>ANNOUNCEMENTS</a>
+<div class="right">
+<a href="ProfileEdit.jsp" align="right"><i class="fa fa-pencil " aria-hidden="true"></i> EDIT PROFILE </a>
+<a href="Main.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a>
+</div>
+</nav>
+<br/><br/>
+<%
+String question=request.getParameter("ques");
+%>
+<center> <div class="container">
+<h4>Post an answer</h4>
+<table width=100%>
+<tr>
+<td>
+<label for="email"><b>Question</b></label>
+</td>
+<td>
+<% out.println(question);%>
+</td>
+</tr>
+<tr>
+<td>
+<label for="email"><b>Answered by</b></label>
+</td>
+<td>
+<input type="text" name="add_name" placeholder="Enter name" required/> <br/>
+</td>
+</tr>
+<tr>
+<td>
+<label for="email"><b>Answer</b></label>
+</td>
+<br/>
+<td>
+<textarea rows="4" cols="160" name="add_ans" width="100%"></textarea>
+</td>
+</tr>
+</table>
+<center><button type="submit" class="insertbtn" name="btnInsert" value="Insert">Done</button></center>
+</div>
+</center>
+<%
+if(request.getParameter("btnInsert")!=null)
+{
+String nm=request.getParameter("add_name");
+String ans=request.getParameter("add_ans");
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement st= c.createStatement();
+int x=st.executeUpdate("update doubt set ans='"+ans+"' , answered_by='"+nm+"' where ques='"+question+"'");
+if(x>0)
+response.sendRedirect("FacultyDoubts.jsp");
+}
+%>
+</form>
+</body>
+</html>
+
+
+admin.css
+*{
+box-sizing: border-box;
+}
+body {
+background-image: url(adminhome.jpg);
+background-size:cover;
+background-repeat:no-repeat;
+background-position:center ;
+margin: 0px;
+height:20%;
+width:100%;
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+header h4 {
+text-align: center;
+
+font-size: 40px;
+color: white;
+}
+
+nav {
+background-color:rgb(17, 124, 143) ;
+overflow: hidden;
+}
+
+nav a {
+text-decoration: none;
+padding: 20px;
+text-align: center;
+float: left;
+color: white;
+}
+
+nav a:hover{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+
+nav a.right{
+text-align:right;
+float:right;
+
+}
+main {
+
+width:100%;
+min-height:100%;
+padding:5px;
+
+text-align: center;
+}
+
+h4 {
+padding: 20px;
+}
+
+footer {
+background-color:rgb(17, 124, 143);
+overflow: hidden;
+position:fixed;
+bottom:0;
+width:100%;
+}
+
+footer a {
+text-decoration: none;
+padding: 20px;
+
+text-align: center;
+float: left;
+color: white;
+}
+
+footer a:hover{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+
+footer a.active{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+
+
+doubtsquestion.jsp
+<%@page import="java.io.File"%>
+<%@page import="java.io.OutputStream"%>
+<%@page import="java.io.IOException"%>
+<%@page import="java.io.FileInputStream"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.*"%>
+<%@page import="java.util.*"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!doctype html>
+<html>
+<head>
+<title> Student | Doubts </title>
+<link href="reg_stud.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+<form method="post">
+<nav>
+<a href="VC_Student_profile.jsp"><i class="fa fa-home " aria-hidden="true"></i> HOME</a>
+<a href="VC_StudyMaterial_student.jsp"><i class="fa fa-file-text " aria-hidden="true"></i> STUDY MATERIAL</a>
+<a class="selected" href="VC_doubts.jsp"><i class="fa fa-question-circle " aria-hidden="true"></i>DOUBTS</a>
+<a href="VC_News.jsp" ><i class="fa fa-bell " aria-hidden="true"></i> NEWS</a>
+<div class="right">
+<a href="VC_Profile_edit.jsp" ><i class="fa fa-pencil " aria-hidden="true"></i> EDIT PROFILE </a>
+<a href="VC_Student_logout.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a>
+</div>
+</nav>
+<%
+String email=(String)session.getAttribute("email1");
+int no_id = Integer.parseInt(request.getParameter("sub_id"));
+try{
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+java.sql.Connection con =DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+String sql="Select * from sub_ject where sub_id="+no_id+" ";
+Statement st= con.createStatement();
+ResultSet rs=st.executeQuery(sql);
+rs=st.executeQuery(sql);
+rs.next();
+int subject_id=rs.getInt("sub_id");
+session.setAttribute("sub_id",no_id);
+%>
+<table width=100%>
+<tr height="20px" >
+<td>
+<a href="modal.jsp" class="link">Post a Question</a>
+</td>
+<td>
+<a href="VC_doubts.jsp?sub_id=<%=no_id%>" style="text-decoration: none;display: inline-block;
+padding: 8px 16px; background-color: #f44336;color:white; left:5px;margin-right:25px;
+text-align:right;float:right;">&laquo; Previous</a>
+</td>
+</tr>
+</table>
+<%
+ResultSet rs1=st.executeQuery("Select * from doubts where sub_id="+no_id+" ");
+while(rs1.next())
+{
+%>
+<div class="table">
+<table width=100% height=100%>
+<tr>
+<td width=10% bgcolor="lightblue">
+Question <%=rs1.getInt("did")%>;
+</td>
+<td>
+<%
+out.println(rs1.getString("ques"));
+%>
+</td>
+<td width=15%>
+<%
+out.println("by "+rs1.getString("asked_by"));
+%>
+</td>
+</tr>
+<tr>
+<td width=10% bgcolor="cyan">
+Ans<%=rs1.getInt("did")%>;
+</td>
+<td>
+<%
+if(rs1.getString("ans")==null)
+{
+%>
+<a href="add_answer.jsp?ques=<%=rs1.getString("ques")%>">Add answer</a>
+<%
+}
+else
+out.println(rs1.getString("ans"));
+%>
+</td>
+<td width="15%">
+<%
+if(rs1.getString("answered_by")!=null)
+{
+out.println(" by "+rs1.getString("answered_by"));
+}
+%>
+</td>
+</tr>
+</table>
+</div>
+<%
+}
+rs1.close();
+rs.close();
+con.close();
+st.close();
+}catch(Exception ex)
+{
+ex.printStackTrace();
+}
+%>
+</form>
+</body
+</html>
+
+
+
+doubtsquestion_faculty.jsp
+<%@page import="java.io.File"%>
+<%@page import="java.io.OutputStream"%>
+<%@page import="java.io.IOException"%>
+<%@page import="java.io.FileInputStream"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.*"%>
+<%@page import="java.util.*"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!doctype html>
+<html>
+<head>
+<title> Student | Doubts </title>
+<link href="reg_stud.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+<form method="post">
+<nav>
+<a href="Faculty_profile.jsp"><i class="fa fa-home" aria-hidden="true"></i>HOME</a>
+<a href="ViewStudent.jsp"><i class="fa fa-users" aria-hidden="true"></i>STUDENTS</a>
+<a href="CStudyMaterial.jsp"><i class="fa fa-file-text" aria-hidden="true"></i>STUDY MATERIAL</a>
+<a href="FacultyDoubts.jsp"><i class="fa fa-question-circle" aria-hidden="true"></i>DOUBTS</a>
+<a href="FacultyNews.jsp"><i class="fa fa-bell" aria-hidden="true"></i>ANNOUNCEMENTS</a>
+<div class="right">
+<a href="ProfileEdit.jsp" align="right"><i class="fa fa-pencil " aria-hidden="true"></i> EDIT PROFILE </a>
+<a href="Main.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a>
+</div>
+</nav>
+<%
+String email=(String)session.getAttribute("email_id");
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+int no_id = Integer.parseInt(request.getParameter("sub_id"));
+try{
+String sql="Select * from sub_ject where sub_id="+no_id+" ";
+Statement st= c.createStatement();
+ResultSet rs=st.executeQuery(sql);
+rs=st.executeQuery(sql);
+rs.next();
+int subject_id=rs.getInt("sub_id");
+session.setAttribute("sub_id",no_id);
+%>
+<table width=100%>
+<tr height="20px" >
+<td>
+<a href="FacultyDoubts.jsp?sub_id=<%=no_id%>" style="text-decoration: none;display: inline-block;padding: 8px 16px; background-color: #f44336;color:white; left:5px;margin-right:25px;text-align:right;float:right;">&laquo; Previous</a>
+</td>
+</tr>
+</table>
+<%
+ResultSet rs1=st.executeQuery("Select * from doubts where sub_id="+no_id+" ");
+while(rs1.next())
+{
+%>
+<div class="table">
+<table width=100% height=100%>
+<tr>
+<td width=10% bgcolor="lightblue">
+Question <%=rs1.getInt("d_id")%>
+</td>
+<td>
+<%
+out.println(rs1.getString("ques"));
+%>
+</td>
+<td width=15%>
+<%
+out.println("by "+rs1.getString("asked_by"));
+%>
+</td>
+</tr>
+<tr>
+<td width=10% bgcolor="cyan">
+Answer <%=rs1.getInt("d_id")%>
+</td>
+<td>
+<%
+if(rs1.getString("ans")==null)
+{
+%>
+<a href="add_answer_faculty.jsp?ques=<%=rs1.getString("ques")%>">Add answer</a>
+<%
+}
+else
+out.println(rs1.getString("ans"));
+%>
+</td>
+<td width="15%">
+<%
+if(rs1.getString("answered_by")!=null)
+
+{
+out.println(" by "+rs1.getString("answered_by"));
+}
+%>
+</td>
+<td width=10% bgcolor="lightblue"><a href="FacultyDeleteDoubts.jsp?did=<%=rs1.getString("d_id")
+%>"><button type="button" class="delete">Delete</button></a></td>
+</tr>
+</table>
+</div>
+<%
+}
+rs1.close();
+rs.close();
+c.close();
+st.close();
+}catch(Exception ex)
+{
+ex.printStackTrace();
+}
+%>
+</form>
+</body
+</html>
+
+
+edit.css
+body {
+font-family: Arial, Helvetica, sans-serif;
+background-color:white;
+width:100%;
+height:100%;
+margin:0px;
+}
+
+* {
+box-sizing: border-box;
+}
+nav {
+background-color:rgb(17, 124, 143) ;
+overflow: hidden;
+}
+
+nav a {
+text-decoration: none;
+padding: 20px;
+text-align: center;
+border:1;
+float: left;
+color: white;
+}
+nav a:hover{
+
+background-color:white;
+color:rgb(17, 124, 143);
+}
+nav a.selected{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+/* Add padding to containers */
+.form{
+width:100%;
+height:100%;
+}
+.container {
+
+padding: 60px;
+background-color: white;
+}
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+width: 100%;
+padding: 15px;
+margin: 5px 0 22px 0;
+display: inline-block;
+border: none;
+
+background: #f1f1f1;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+background-color: #ddd;
+outline: none;
+}
+select {
+width: 100%;
+padding: 15px;
+margin: 5px 0 22px 0;
+display:block;
+border: none;
+background: #f1f1f1;
+}
+/* Overwrite default styles of hr */
+hr {
+border: 1px solid #f1f1f1;
+margin-bottom: 25px;
+}
+
+/* Set a style for the submit button */
+.updatebtn,.registerbtn {
+background-color: #4CAF50;
+color: white;
+
+padding: 16px 20px;
+margin: 8px 0;
+border: none;
+cursor: pointer;
+width: 100%;
+opacity: 0.9;
+}
+
+.updatebtn:hover {
+opacity: 1;
+}
+.right{
+text-align:right;
+float:right;
+}
+footer {
+background-color:rgb(17, 124, 143);
+overflow: hidden;
+bottom:0;
+width:100%;
+}
+
+footer a {
+text-decoration: none;
+padding: 20px;
+
+text-align: center;
+float: left;
+color: white;
+}
+footer a:hover{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+footer a.active{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+
+
+
+file_download.jsp
+<%@page import="java.io.IOException"%>
+<%@page import="java.io.PrintWriter"%>
+<%@page import="javax.activation.MimetypesFileTypeMap"%>
+<%@page import="java.io.InputStream"%>
+<%@page import="java.io.OutputStream"%>
+<%@page import="java.io.FileInputStream"%>
+<%@page import="java.io.File"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.*"%>
+<%@page import="java.util.*"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Download page </title>
+</head>
+<body>
+<form method="post" >
+</form>
+</body>
+</html>
+<%
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+java.sql.Connection con =DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+String docname=request.getParameter("docname");
+String sql="Select * from document where doc_name='"+docname+"'";
+Statement st= con.createStatement();
+ResultSet rs=st.executeQuery(sql);
+rs.next();
+int BUFFER_SIZE1 = 52428000;
+String UPLOAD_DIR = "uploadedFiles";
+String filepath= rs.getString("doc_path");
+File file = new File(filepath);
+OutputStream outStream = null;
+FileInputStream inputStream = null;
+if (file.exists())
+{
+String mimeType = "application/octet-stream";
+response.setContentType(mimeType);
+String headerKey = "Content-Disposition";
+String headerValue = String.format("attachment; filename=\"%s\"", file.getName());
+response.setHeader(headerKey, headerValue);
+try {
+outStream = response.getOutputStream();
+inputStream = new FileInputStream(file);
+byte[] buffer = new byte[BUFFER_SIZE1];
+int bytesRead = -1;
+while ((bytesRead = inputStream.read(buffer)) != -1) {
+outStream.write(buffer, 0, bytesRead);
+}
+} catch(IOException ioExObj) {
+System.out.println("Exception While Performing The I/O Operation?= " +
+ioExObj.getMessage());
+} finally {
+if (inputStream != null) {
+inputStream.close();
+}
+outStream.flush();
+if (outStream != null) {
+outStream.close();
+}
+}
+}
+else {
+response.setContentType("text/html");
+response.getWriter().println("<h3>File Is Not Present .....!</h3>");
+}
+rs.close();
+st.close();
+con.close();
+%>
+
+
+
+forget_password.jsp
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Student | Forgot Password </title>
+<style>
+.container{
+width:30%;
+height:350px;
+border:solid;
+border-width:1px;
+border-color:blue;
+box-shadow:3px 2px 2px 3px #808080;
+}
+input[type=text], input[type=password], input[type=number]{
+  width: 40%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+h1{
+color:black;
+text-shadow:-1px 0 blue, 0 1px blue , 1px 0 blue,0 -1px blue;
+}
+.button1 {
+  background-color: dodgerblue;
+  color: white;
+  padding: 12px 15px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 25%;
+  opacity: 0.9;
+}
+
+.button1:hover {
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+    <form method="Post">
+<h1 align="center"> Lets Find Your Account</h1>
+<hr style="width:100%;text-align:left;margin-left:0">
+</br></br>
+<center>
+<div class="container">
+<h2> Forgot Password</h2></br>
+No Problem! Enter your email below</br></br>
+<input type="text" name="email" placeholder="Enter email" required/></br>
+<button class="button1" name="search"><span>Search</span></button></br> </br>
+Back to <a href="VC_Student_login.jsp">Login</a>
+</div>
+</center>
+<%
+    try{
+        if(request.getParameter("search")!=null)
+        {
+            String username=request.getParameter("email");
+            session.setAttribute("email_id",username);
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+    java.sql.Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+     Statement st= con.createStatement();
+            ResultSet rs=st.executeQuery("select * from student where email_id='"+username+"'");
+            if(rs.next())
+            {
+                response.sendRedirect("student_security_answer.jsp");
+            }
+            else
+            {
+                out.println("<script>alert('Email not found')</script> ");
+            }
+        }
+}catch (Exception e) {
+        e.printStackTrace();
+    }
+  %>          
+    </form>
+</body>
+</html>
+
+
+
+login_student.css
+*
+{
+box-sizing: border-box;
+}
+
+body {
+margin: 0px;
+width:100%;
+height:105%;
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+header h3 {
+
+text-align: center;
+font-size: 40px;
+color: white;
+}
+
+nav {
+background-color:rgb(17, 124, 143) ;
+overflow: hidden;
+}
+
+nav a {
+text-decoration: none;
+padding: 20px;
+text-align: center;
+float: left;
+color: white;
+}
+nav a:hover{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+nav a.selected{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+
+main {
+background-position: center;
+background-size: cover;
+position: relative;
+width:100%;
+padding:5px;
+background-repeat:no-repeat;
+background-position:center center;
+text-align: center;
+}
+
+h4 {
+padding: 20px;
+}
+section {
+background-color:white ;
+width:400px;
+height:365px;
+margin: 5em auto;
+border-radius: 1.5em;
+box-shadow: 0px 11px 35px 0px #000000;
+}
+section{
+min-height: 45vh;
+}
+footer {
+background-color:rgb(17, 124, 143);
+overflow: hidden;
+bottom:0;
+width:100%;
+}
+
+footer a {
+text-decoration: none;
+padding: 20px;
+text-align: center;
+float: left;
+color: white;
+}
+footer a:hover{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+footer a.active{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+
+.right{
+text-align:right;
+float:right;
+}
+img{
+top:60px;
+}
+span{
+color:black;
+}
+
+
+password_set.jsp
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Faculty | Password Reset </title>
+<style>
+.container{
+width:30%;
+height:400px;
+border:solid;
+border-width:1px;
+border-color:blue;
+box-shadow:3px 2px 2px 3px #808080;
+}
+input[type=text], input[type=password], input[type=number]{
+  width: 50%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+h1{
+color:black;
+text-shadow:-1px 0 blue, 0 1px blue , 1px 0 blue,0 -1px blue;
+}
+.button1 {
+  background-color: dodgerblue;
+  color: white;
+  padding: 12px 15px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 25%;
+  opacity: 0.9;
+}
+
+.button1:hover {
+  opacity: 1;
+}
+</style>
+        <script>
+function validate(){
+                var password=document.getElementById('pass').value;
+var c_password=document.getElementById('c_pass').value;
+                if(password !== c_password)
+{
+alert('password does not match ');
+return false;
+}
+                return true;
+}
+</script>
+</head>
+<body>
+    <form method="Post" onsubmit="return validate()">
+<h1 align="center"> Password Reset</h1>
+<hr style="width:100%;text-align:left;margin-left:0">
+<center>
+<div class="container">
+<h4> Enter New Password</h4>
+<h5>Password</h5>
+<input type="password" id="pass" name="password" placeholder="Enter password" required/></br>
+<h5>Re-type Passsword</h5>
+<input type="password" id="c_pass"  name="c_password" placeholder="Enter password" required/></br>
+<button class="button1" name="submitbtn"><span>Submit</span></button></br> </br>
+
+</div>
+</center>
+<%
+    try{
+        if(request.getParameter("submitbtn")!=null)
+        {
+            String pass=request.getParameter("password");
+            String user=(String)session.getAttribute("email");
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            java.sql.Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+            Statement st= con.createStatement();
+            String sql1="update vc_faculty set pass=? where email_id='"+user+"'";
+            PreparedStatement ps=con.prepareStatement(sql1);
+            ps.setString(1,pass);
+            if(ps.executeUpdate()>0)
+            {
+                response.sendRedirect("FacultyLogin.jsp");
+            }
+        }
+}catch (Exception e) {
+        e.printStackTrace();
+    }
+  %>      
+    </form>
+</body>
+</html>
+
+
+reg_stud.css
+body {
+margin: 0px;
+height:100%;
+width:100%;
+font-weight: 500;
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+header h1 {
+text-align: center;
+
+font-size: 50px;
+color: white;
+}
+.right{
+text-align:right;
+float:right;
+}
+nav a.selected{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+nav {
+background-color:rgb(17, 124, 143) ;
+overflow: hidden;
+}
+
+nav a {
+text-decoration: none;
+padding: 20px;
+text-align: center;
+float: left;
+color: white;
+}
+nav a:hover{
+background-color:white;
+
+color:rgb(17, 124, 143);
+}
+nav
+.modal {
+display: none; /* Hidden by default */
+position: fixed; /* Stay in place */
+z-index: 1; /* Sit on top */
+padding-top: 100px; /* Location of the box */
+left: 0;
+top: 0;
+width: 100%; /* Full width */
+height: 100%; /* Full height */
+overflow: auto; /* Enable scroll if needed */
+background-color: rgb(0,0,0); /* Fallback color */
+background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+.right{
+text-align:right;
+float:right;
+}
+/* Modal Content */
+.modal-content {
+background-color: #fefefe;
+margin: auto;
+padding: 20px;
+
+border: 1px solid #888;
+width: 80%;
+}
+
+/* The Close Button */
+.close {
+color: #aaaaaa;
+float: right;
+font-size: 28px;
+font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+color: #000;
+text-decoration: none;
+cursor: pointer;
+}
+
+table {
+border-collapse: collapse;
+border-spacing: 0;
+width: 100%;
+border: 1px solid #ddd;
+}
+
+th, td {
+text-align: center;
+padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+h2 {
+text-align: center;
+padding: 20px;
+}
+
+footer {
+background-color:rgb(17, 124, 143);
+overflow: hidden;
+position:fixed;
+bottom:0;
+width:100%;
+}
+
+footer a {
+text-decoration: none;
+
+padding: 20px;
+text-align: center;
+float: left;
+color: white;
+}
+footer a:hover{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+footer a.active{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+
+
+security_answer.jsp
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Faculty | Password Reset </title>
+<style>
+.container{
+width:35%;
+height:350px;
+border:solid;
+border-width:1px;
+border-color:blue;
+box-shadow:3px 2px 2px 3px #808080;
+}
+input[type=text], input[type=password], input[type=number]{
+  width: 50%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+h1{
+color:black;
+text-shadow:-1px 0 blue, 0 1px blue , 1px 0 blue,0 -1px blue;
+}
+.button1 {
+  background-color: dodgerblue;
+  color: white;
+  padding: 12px 15px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 25%;
+  opacity: 0.9;
+}
+
+.button1:hover {
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+    <form method="Post">
+<h1 align="center"> Password Reset</h1>
+<hr style="width:100%;text-align:left;margin-left:0">
+<center>
+<div class="container">
+<h4> We found your account </h4>
+
+<%
+    try{
+             String username=(String)session.getAttribute("email_id");
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            session.setAttribute("email",username);
+            java.sql.Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+            Statement st= con.createStatement();
+            ResultSet rs=st.executeQuery("select * from vc_faculty where email_id='"+username+"'");
+            rs.next();
+            out.println(rs.getString(2));
+            %>
+            <h4> Kindly enter the answer to the given security question you have entered while registering to the Classroom</h4></br>
+            Question:
+            <%
+            out.print(rs.getString("sec_ques"));
+            %>
+            </br> <input type="text" name="answer" placeholder="Enter answer" required/></br>
+<button class="button1" name="submitbtn"><span>Submit</span></button></br> </br>
+
+</div>
+</center>
+<%
+    try{
+        if(request.getParameter("submitbtn")!=null)
+        {
+           String ans=request.getParameter("answer");
+           if(rs.getString("sec_ans").equalsIgnoreCase(ans))
+            {
+                response.sendRedirect("password_set.jsp");
+            }
+            else
+            {
+                out.println("<script>alert('Wrong Answer')</script> ");
+            }
+        }
+}catch (Exception e) {
+        e.printStackTrace();
+    }
+    rs.close();
+    st.close();
+    con.close();
+    }catch (Exception ex) {
+        ex.printStackTrace();
+    }
+  %>      
+    </form>
+</body>
+</html>
+
+
+
+student_password_set.jsp
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Faculty | Password Reset </title>
+<style>
+.container{
+width:30%;
+height:400px;
+border:solid;
+border-width:1px;
+border-color:blue;
+box-shadow:3px 2px 2px 3px #808080;
+}
+input[type=text], input[type=password], input[type=number]{
+  width: 50%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+h1{
+color:black;
+text-shadow:-1px 0 blue, 0 1px blue , 1px 0 blue,0 -1px blue;
+}
+.button1 {
+  background-color: dodgerblue;
+  color: white;
+  padding: 12px 15px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 25%;
+  opacity: 0.9;
+}
+
+.button1:hover {
+  opacity: 1;
+}
+</style>
+        <script>
+function validate(){
+                var password=document.getElementById('pass').value;
+var c_password=document.getElementById('c_pass').value;
+                if(password !== c_password)
+{
+alert('password does not match ');
+return false;
+}
+                return true;
+}
+</script>
+</head>
+<body>
+    <form method="Post" onsubmit="return validate()">
+<h1 align="center"> Password Reset</h1>
+<hr style="width:100%;text-align:left;margin-left:0">
+<center>
+<div class="container">
+<h4> Enter New Password</h4>
+<h5>Password</h5>
+<input type="password" id="pass" name="password" placeholder="Enter password" required/></br>
+<h5>Re-type Passsword</h5>
+<input type="password" id="c_pass"  name="c_password" placeholder="Enter password" required/></br>
+<button class="button1" name="submitbtn"><span>Submit</span></button></br> </br>
+
+</div>
+</center>
+<%
+    try{
+        if(request.getParameter("submitbtn")!=null)
+        {
+            String pass=request.getParameter("password");
+            String user=(String)session.getAttribute("email");
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            java.sql.Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+            Statement st= con.createStatement();
+            String sql1="update student set pass=? where email_id='"+user+"'";
+            PreparedStatement ps=con.prepareStatement(sql1);
+            ps.setString(1,pass);
+            if(ps.executeUpdate()>0)
+            {
+                response.sendRedirect("VC_Student_login.jsp");
+            }
+        }
+}catch (Exception e) {
+        e.printStackTrace();
+    }
+  %>      
+    </form>
+</body>
+</html>
+
+
+student_security_answer.jsp
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Student | Password Reset </title>
+<style>
+.container{
+width:35%;
+height:350px;
+border:solid;
+border-width:1px;
+border-color:blue;
+box-shadow:3px 2px 2px 3px #808080;
+}
+input[type=text], input[type=password], input[type=number]{
+  width: 50%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+h1{
+color:black;
+text-shadow:-1px 0 blue, 0 1px blue , 1px 0 blue,0 -1px blue;
+}
+.button1 {
+  background-color: dodgerblue;
+  color: white;
+  padding: 12px 15px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 25%;
+  opacity: 0.9;
+}
+
+.button1:hover {
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+    <form method="Post">
+<h1 align="center"> Password Reset</h1>
+<hr style="width:100%;text-align:left;margin-left:0">
+<center>
+<div class="container">
+<h4> We found your account </h4>
+<%
+    try{
+             String username=(String)session.getAttribute("email_id");
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            session.setAttribute("email",username);
+            java.sql.Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+            Statement st= con.createStatement();
+            ResultSet rs=st.executeQuery("select * from student where email_id='"+username+"'");
+            rs.next();
+            out.println(rs.getString(2));
+            %>
+            <h4> Kindly enter the answer to the given security question you have entered while registering to the Classroom</h4></br>
+            Question:
+            <%
+            out.print(rs.getString("sec_ques"));
+            %>
+            </br> <input type="text" name="answer" placeholder="Enter answer" required/></br>
+<button class="button1" name="submitbtn"><span>Submit</span></button></br> </br>
+
+</div>
+</center>
+<%
+    try{
+        if(request.getParameter("submitbtn")!=null)
+        {
+           String ans=request.getParameter("answer");
+           if(rs.getString("sec_ans").equalsIgnoreCase(ans))
+            {
+                response.sendRedirect("student_password_set.jsp");
+            }
+            else
+            {
+                out.println("<script>alert('Wrong Answer')</script> ");
+            }
+        }
+}catch (Exception e) {
+        e.printStackTrace();
+    }
+    rs.close();
+    st.close();
+    con.close();
+    }catch (Exception ex) {
+        ex.printStackTrace();
+    }
+  %>      
+    </form>
+</body>
+</html>
+
+
+
+
+style.css
+*{
+box-sizing:border-box;
+}
+body{
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+width:100%;
+height:100%;
+margin:0px; /*edit this line in every page */
+}
+nav {
+background-color:rgb(17, 124, 143) ;
+overflow: hidden;
+}
+
+nav a {
+text-decoration: none;
+padding: 20px;
+text-align: center;
+border:1;
+float: left;
+color: white;
+}
+nav a:hover{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+nav a:active{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+h3{
+text-align:center;
+
+}
+h4{
+text-align:center;
+}
+.column1 img{
+
+margin-top:75px;
+margin-left:auto;
+margin-right:auto;
+display:block;
+vertical-align:top;
+}
+
+.cd{
+height:100px;
+width:1030px;
+background-color:white;
+color:black;
+font-weight:800;
+font-size:20px;
+margin:20px;
+padding:2px;
+border:1px solid;
+border-radius: 1.5em;
+box-shadow: 0px 11px 35px 0px #888888 ;
+background-image: linear-gradient(45deg,#ffffff ,rgba(17, 124, 143,0.5));
+}
+.cd1{
+line-height: normal;
+height:500px;
+
+width:1030px;
+background-color:white;
+color:black;
+font-weight:800;
+font-size:20px;
+margin:20px;
+padding:2px;
+border:1px solid;
+border-radius: 1.5em;
+box-shadow: 0px 11px 35px 0px #888888 ;
+background-image: linear-gradient(45deg,#ffffff ,rgba(17, 124, 143,0.5));
+}
+.right{
+text-align:right;
+float:right;
+}
+.container{
+margin-top: 30px;
+background-color:white;
+display:flex;
+flex-direction:column;
+justify-content:space-evenly;
+flex-wrap:wrap;
+align-content:space-evenly;
+width:100%;
+
+height:1200px;
+
+}
+h4{
+text-align:center;
+}
+footer {
+background-color:rgb(17, 124, 143);
+overflow: hidden;
+
+bottom:0;
+width:100%;
+}
+
+footer a {
+text-decoration: none;
+padding: 20px;
+text-align: center;
+float: left;
+color: white;
+}
+footer a:hover{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+
+footer a.active{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+
+
+style4.css
+body {
+background-color: white;
+width:100%;
+min-height:100%;
+padding:5px;
+background-size:cover;
+background-repeat:no-repeat;
+background-position:center center;
+margin: 0px;
+height:100%;
+width:100%;
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+header h4 {
+text-align: center;
+font-size: 40px;
+color: white;
+}
+
+nav {
+background-color:rgb(17, 124, 143) ;
+overflow: hidden;
+}
+
+nav a {
+text-decoration: none;
+padding: 20px;
+text-align: center;
+float: left;
+color: white;
+}
+
+nav a:hover{
+background-color:white;
+
+color:rgb(17, 124, 143);
+}
+
+main {
+text-align: center;
+}
+
+h4 {
+padding: 20px;
+}
+
+footer {
+background-color:rgb(17, 124, 143);
+overflow: hidden;
+position:fixed;
+bottom:0;
+width:100%;
+}
+
+footer a {
+text-decoration: none;
+padding: 20px;
+text-align: center;
+float: left;
+color: white;
+}
+
+footer a:hover{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+
+footer a.active{
+background-color:white;
+color:rgb(17, 124, 143);
+}
+
+
+
+update.jsp
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.sql.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Admin | Delete Student</title>
+<link rel="stylesheet" href="style4.css" type="text/css" >
+</head>
+<body>
+<%
+try {
+int no=Integer.parseInt(request.getParameter("sid"));
+int sumcount=0;
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement s= c.createStatement();
+int x=s.executeUpdate("delete from student where sid="+no+" ");
+if(x>0)
+{
+out.println("<script type=\"text/javascript\">");
+out.println("alert('Student deleted successfully');");
+out.println("location='Student.jsp';");
+out.println("</script>");
+}
+else
+{
+out.print("<script>alert('Something went wrong.')</script>");
+}
+}
+catch(Exception e){}
+%>
+</body>
+</html>
+
+
+verifyFaculty.jsp
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.sql.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Admin | Verify Student</title>
+<link rel="stylesheet" href="style4.css" type="text/css" >
+</head>
+<body>
+<%
+try{
+int no=Integer.parseInt(request.getParameter("fid"));
+int sumcount=0;
+out.println(no);
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection c=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement s= c.createStatement();
+String sql1="update vc_faculty set status=1 where fid="+no+"";
+PreparedStatement ps=c.prepareStatement(sql1);
+ps.executeUpdate();
+if(ps.executeUpdate()>=1)
+{
+out.println("<script type=\"text/javascript\">");
+out.println("alert('Faculty is verified successfully');");
+out.println("location='Faculty.jsp';");
+out.println("</script>");
+}
+s.close();
+c.close();
+}
+catch (SQLException exx) {
+exx.printStackTrace(response.getWriter());
+}
+%>
+</body>
+</html>
+
+
+verifyStudent.jsp
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.sql.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Admin | Verify Student</title>
+<link rel="stylesheet" href="style4.css" type="text/css" >
+</head>
+<body>
+<%
+try{
+int no=Integer.parseInt(request.getParameter("sid"));
+int sumcount=0;
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+Connection con=DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement s= con.createStatement();
+String sql1="update student set status=1 where sid="+no+"";
+PreparedStatement ps=con.prepareStatement(sql1);
+ps.executeUpdate();
+if(ps.executeUpdate()>=1)
+{
+//response.sendRedirect("Student.jsp");
+out.println("<script type=\"text/javascript\">");
+out.println("alert('Student is verified successfully');");
+out.println("location='Student.jsp';");
+out.println("</script>");
+}
+s.close();
+con.close();
+}
+catch (SQLException exx) {
+exx.printStackTrace(response.getWriter());
+}
+%>
+</body>
+</html>
+
+viewstudymaterial.jsp
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="Studymaterial_student.css" type="text/css" rel="stylesheet">
+<title>Student | Study Material</title>
+<style>
+.previous:hover {
+background-color:red;
+color: black;
+}
+</style>
+</head>
+<body>
+<form method="post">
+<nav>
+<a href="VC_Student_profile.jsp"><i class="fa fa-home" aria-hidden="true"></i> HOME</a>
+<a class="selected" href="VC_StudyMaterial_student.jsp"><i class="fa fa-file-text " aria-hidden="true"></i> STUDY MATERIAL</a>
+<a href="VC_doubts.jsp"><i class="fa fa-question-circle " aria-hidden="true"></i> DOUBTS</a>
+<a href="VC_News.jsp" ><i class="fa fa-bell " aria-hidden="true"></i> NEWS</a>
+<div class="right">
+<a href="VC_Profile_edit.jsp" ><i class="fa fa-pencil " aria-hidden="true"></i> EDIT PROFILE </a>
+<a href="VC_Student_logout.jsp"><i class="fa fa-sign-out" aria-hidden="true"></i>LOGOUT</a>
+</div>
+</nav>
+<%
+int no = Integer.parseInt(request.getParameter("sub_id"));
+try{
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+java.sql.Connection con =DriverManager.getConnection("jdbc:derby://localhost:1527/VirtualClassroom");
+Statement st= con.createStatement();
+ResultSet rs1=st.executeQuery("Select * from document where sub_id="+no+" ");
+%>
+<div class="table">
+<table width=100%>
+<tr height="20px">
+<td>
+</td>
+<td>
+<a href="VC_StudyMaterial_student.jsp" style="text-decoration: none;display: inline-block;padding: 8px 16px; background-color: #f44336;
+color:white; left:5px;margin-right:25px;text-align:right;float:right;">&laquo; Previous</a>
+</td>
+</tr>
+</table>
+<table border=1 width=100% height=100%>
+<tr>
+<th> File Name </th>
+<th> Download </th>
+</tr>
+<%
+while(rs1.next())
+{
+%>
+<tr>
+<td>
+<%
+String docs=rs1.getString("doc_name");
+out.println(docs);
+%>
+</td>
+<td>
+<a href="file_download.jsp?docname=<%=rs1.getString("doc_name")%>" > DOWNLOAD </a>
+</td>
+</tr>
+<%
+}
+rs1.close();
+%>
+</table>
+</div>
+<%
+}catch(Exception e1)
+{
+out.println("cant click button");
+}
+%>
+</form>
+</body>
+</html>
